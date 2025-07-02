@@ -30,8 +30,8 @@ public class Client {
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
-    @Email(message = "Formato de correo electrónico inválido.")
     @NotBlank(message = "El correo electrónico es obligatorio.")
+    @Email(message = "Formato de correo electrónico inválido.")
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
