@@ -20,19 +20,19 @@ public class Product {
     private Long id;
 
     @NotBlank(message = "El nombre es obligaotorio.")
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Min(value = 0, message = "El precio no puede ser un número negativo.")
-    @Column(name = "price")
-    private int price;
+    @Column(name = "price", nullable = false)
+    private double price;
 
     @NotBlank(message = "La categoría es obligatoria.")
-    @Column(name = "category")
+    @Column(name = "category", nullable = false)
     private Category category;
 
     @Min(value = 0, message = "Las existencias no pueden ser negativas.")
-    @Column(name = "stock")
+    @Column(name = "stock", nullable = false)
     private int stock;
 
 }
