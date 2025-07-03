@@ -33,7 +33,7 @@ public class Provider {
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @OneToMany(mappedBy = "products_catalog")
-    private List<ProductCatalog> productCatalog;
+    @OneToMany(mappedBy = "provider_products")
+    private List<ProviderProduct> providerProducts;
 
 }

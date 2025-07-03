@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "provider_products")
-public class ProviderProduct {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,8 @@ public class ProviderProduct {
     @Column(name = "category")
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "provider_id", nullable = false)
-    private Provider provider;
+    @Min(value = 0, message = "Las existencias no pueden ser negativas.")
+    @Column(name = "stock")
+    private int stock;
 
 }
