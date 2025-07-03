@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Min(value = 0, message = "El documento no puede ser negativo y mínimo de 10 dígitos.")
+    @Column(name = "id", length = 10)
     private Long id;
 
     @NotBlank(message = "El nombre es obligatorio.")
