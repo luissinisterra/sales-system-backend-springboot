@@ -1,4 +1,4 @@
-package com.api.sales_system.service.Impl;
+package com.api.sales_system.service.impl;
 
 import com.api.sales_system.dto.ClientRequestDTO;
 import com.api.sales_system.dto.ClientResponseDTO;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ClientServiceImpl implements ClientService {   
+public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
 
