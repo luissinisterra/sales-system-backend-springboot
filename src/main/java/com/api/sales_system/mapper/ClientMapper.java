@@ -4,6 +4,7 @@ import com.api.sales_system.dto.ClientRequestDTO;
 import com.api.sales_system.dto.ClientResponseDTO;
 import com.api.sales_system.entity.Client;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 

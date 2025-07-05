@@ -17,7 +17,7 @@ public class Client {
 
     @Id
     @Min(value = 10, message = "El docúmento no puede ser negativo y de mínimo de 10 dígitos.")
-    @Column(name = "id", length = 10)
+    @Column(name = "id", length = 10, unique = true)
     private Long id;
 
     @NotBlank(message = "El nombre es obligatorio.")
