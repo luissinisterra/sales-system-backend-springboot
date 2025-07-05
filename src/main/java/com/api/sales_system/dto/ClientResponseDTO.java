@@ -3,10 +3,16 @@ package com.api.sales_system.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClientResponseDTO {
 
-    @Min(value = 0, message = "El documento no puede ser negativo ni mínimo de 10 dígitos.")
+    @Min(value = 10, message = "El docúmento no puede ser negativo y de mínimo de 10 dígitos.")
     private Long id;
 
     @NotBlank(message = "El nombre es obligatorio.")

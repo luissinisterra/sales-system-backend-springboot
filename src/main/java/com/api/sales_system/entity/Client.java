@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Client {
 
     @Id
-    @Min(value = 0, message = "El documento no puede ser negativo ni mínimo de 10 dígitos.")
+    @Min(value = 10, message = "El docúmento no puede ser negativo y de mínimo de 10 dígitos.")
     @Column(name = "id", length = 10)
     private Long id;
 

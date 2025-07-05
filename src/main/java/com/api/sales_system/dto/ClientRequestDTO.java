@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ClientRequestDTO {
 
-    @Min(value = 0, message = "El documento no puede ser negativo ni mínimo de 10 dígitos.")
+    @Min(value = 10, message = "El docúmento no puede ser negativo y de mínimo de 10 dígitos.")
     private Long id;
 
     @NotBlank(message = "El nombre es obligatorio.")
