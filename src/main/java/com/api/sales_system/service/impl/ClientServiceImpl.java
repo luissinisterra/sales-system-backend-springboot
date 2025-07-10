@@ -1,7 +1,8 @@
 package com.api.sales_system.service.impl;
 
-import com.api.sales_system.dto.ClientRequestDTO;
+import com.api.sales_system.dto.ClientCreateDTO;
 import com.api.sales_system.dto.ClientResponseDTO;
+import com.api.sales_system.dto.ClientUpdateDTO;
 import com.api.sales_system.entity.Client;
 import com.api.sales_system.exception.ResourceAlreadyExistsException;
 import com.api.sales_system.exception.ResourceNotFoundException;
@@ -27,12 +28,12 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientResponseDTO createClient(ClientRequestDTO clientRequestDTO) {
-        Optional<Client> clientOpt = this.clientRepository.findById(clientRequestDTO.getId());
+    public ClientResponseDTO createClient(ClientCreateDTO clientCreateDTO) {
+        Optional<Client> clientOpt = this.clientRepository.findById(clientCreateDTO.getId());
 
         if(clientOpt.isPresent()) throw new ResourceAlreadyExistsException("El cliente con el id: " + clientOpt.get().getId() + " ya exíste en el sistéma.");
 
-        Client client = this.clientMapper.toEntity(clientRequestDTO);
+        Client client = this.clientMapper.toEntity(clientCreateDTO);
 
         return this.clientMapper.toResponseDTO(this.clientRepository.save(client));
     }
@@ -53,6 +54,22 @@ public class ClientServiceImpl implements ClientService {
         if (clientOpt.isEmpty()) throw new ResourceNotFoundException("El cliente con el id: " + id + " no fué encontrado.");
 
         return this.clientMapper.toResponseDTO(clientOpt.get());
+    }
+
+    @Override
+    public ClientResponseDTO updateClient(Long id, ClientUpdateDTO clientUpdateDTO){
+        Optional<Client> clientOpt = this.clientRepository.findById(id);
+
+        if (clientOpt.isEmpty()) throw new ResourceNotFoundException("El cliente con el id: " + id + " no fué encontrado.");
+
+        clientOpt.get().setId(id);
+        clientOpt.get().setFirstName(clientUpdateDTO.getFirstName());
+        clientOpt.get().setLastName(clientUpdateDTO.getLastName());
+        clientOpt.get().setPhoneNumber(clientUpdateDTO.getPhoneNumber());
+        clientOpt.get().setEmail(clientUpdateDTO.getEmail());
+        clientOpt.get().setAge(clientUpdateDTO.getAge());
+
+        return this.clientMapper.toResponseDTO(this.clientRepository.save(clientOpt.get()));
     }
 
     @Override

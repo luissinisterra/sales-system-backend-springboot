@@ -3,7 +3,7 @@ package com.api.sales_system.service.impl;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.api.sales_system.dto.ClientRequestDTO;
+import com.api.sales_system.dto.ClientCreateDTO;
 import com.api.sales_system.entity.Client;
 import com.api.sales_system.mapper.ClientMapper;
 import com.api.sales_system.repository.ClientRepository;
@@ -29,7 +29,7 @@ public class ClientServiceImplTest {
     @Test
     void createClientTest() {
         // Having
-        ClientRequestDTO clientRequestDTO = ClientTestDataBuilder.buildClientRequestDTO();
+        ClientCreateDTO clientRequestDTO = ClientTestDataBuilder.buildClientRequestDTO();
         Client client = ClientTestDataBuilder.buildClient();
 
         // Mocking the repository save

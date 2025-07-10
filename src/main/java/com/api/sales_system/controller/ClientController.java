@@ -1,7 +1,8 @@
 package com.api.sales_system.controller;
 
-import com.api.sales_system.dto.ClientRequestDTO;
+import com.api.sales_system.dto.ClientCreateDTO;
 import com.api.sales_system.dto.ClientResponseDTO;
+import com.api.sales_system.dto.ClientUpdateDTO;
 import com.api.sales_system.service.impl.ClientServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,7 +39,7 @@ public class ClientController {
             @ApiResponse(responseCode = "400", description = "Validation error - invalid input data"),
             @ApiResponse(responseCode = "409", description = "Conflict - email or phone number already exists")
     })
-    public ResponseEntity<ClientResponseDTO> createClient(@Valid @RequestBody ClientRequestDTO clientRequestDTO) {
+    public ResponseEntity<ClientResponseDTO> createClient(@Valid @RequestBody ClientCreateDTO clientRequestDTO) {
         ClientResponseDTO clientResponseDTO = this.clientServiceImpl.createClient(clientRequestDTO);
         return new ResponseEntity<>(clientResponseDTO, HttpStatus.CREATED);
     }
@@ -75,6 +76,22 @@ public class ClientController {
         return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
     }
 
+    @PutMapping("{id}")
+    @Operation(
+            summary = "Update client by ID",
+            description = "Updates the client's information using their unique document ID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Client updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Client not found")
+    })
+    public ResponseEntity<ClientResponseDTO> updateClient(
+            @Parameter(description = "Document ID of the client to retrieve", example = "1234567890")
+            @PathVariable Long id, @Valid @RequestBody ClientUpdateDTO clientUpdateDTO){
+        ClientResponseDTO clientResponseDTO = this.clientServiceImpl.updateClient(id, clientUpdateDTO);
+        return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
+    }
+
     @GetMapping
     @Operation(
             summary = "Get all clients",
@@ -89,3 +106,4 @@ public class ClientController {
         return new ResponseEntity<>(clientsResponseDTOS, HttpStatus.OK);
     }
 }
+

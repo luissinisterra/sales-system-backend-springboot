@@ -1,6 +1,6 @@
 package com.api.sales_system.controller;
 
-import com.api.sales_system.dto.EmployeeRequestDTO;
+import com.api.sales_system.dto.EmployeeCreateDTO;
 import com.api.sales_system.dto.EmployeeResponseDTO;
 import com.api.sales_system.service.impl.EmployeeServiceImpl;
 import jakarta.validation.Valid;
@@ -23,7 +23,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeRequestDTO employeeRequestDTO){
+    public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeCreateDTO employeeRequestDTO){
         EmployeeResponseDTO employeeResponseDTO = this.employeeService.createEmployee(employeeRequestDTO);
         return new ResponseEntity<>(employeeResponseDTO, HttpStatus.CREATED);
     }

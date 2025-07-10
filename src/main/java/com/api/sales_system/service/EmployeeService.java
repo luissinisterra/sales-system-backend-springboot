@@ -1,12 +1,12 @@
 package com.api.sales_system.service;
 
-import com.api.sales_system.dto.EmployeeRequestDTO;
+import com.api.sales_system.dto.EmployeeCreateDTO;
 import com.api.sales_system.dto.EmployeeResponseDTO;
 
 import java.util.List;
 
 public interface EmployeeService {
-    EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO);
+    EmployeeResponseDTO createEmployee(EmployeeCreateDTO employeeCreateDTO);
     void deleteEmployeeById(Long id);
     EmployeeResponseDTO getEmployeeById(Long id);
     List<EmployeeResponseDTO> getEmployees();

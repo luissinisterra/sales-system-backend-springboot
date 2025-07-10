@@ -1,6 +1,6 @@
 package com.api.sales_system.service.impl;
 
-import com.api.sales_system.dto.EmployeeRequestDTO;
+import com.api.sales_system.dto.EmployeeCreateDTO;
 import com.api.sales_system.dto.EmployeeResponseDTO;
 import com.api.sales_system.entity.Employee;
 import com.api.sales_system.exception.ResourceNotFoundException;
@@ -29,8 +29,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO) {
-        Employee employee = this.employeeMapper.toEntity(employeeRequestDTO);
+    public EmployeeResponseDTO createEmployee(EmployeeCreateDTO employeeCreateDTO) {
+        Employee employee = this.employeeMapper.toEntity(employeeCreateDTO);
         String encodedPassword = this.passwordEncoder.encode(employee.getPassword());
 
         employee.setPassword(encodedPassword);

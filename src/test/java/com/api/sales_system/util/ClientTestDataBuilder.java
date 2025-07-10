@@ -1,6 +1,6 @@
 package com.api.sales_system.util;
 
-import com.api.sales_system.dto.ClientRequestDTO;
+import com.api.sales_system.dto.ClientCreateDTO;
 import com.api.sales_system.dto.ClientResponseDTO;
 import com.api.sales_system.entity.Client;
 
@@ -17,8 +17,8 @@ public class ClientTestDataBuilder {
         );
     }
 
-    public static ClientRequestDTO buildClientRequestDTO() {
-        ClientRequestDTO clientRequestDTO = new ClientRequestDTO();
+    public static ClientCreateDTO buildClientRequestDTO() {
+        ClientCreateDTO clientRequestDTO = new ClientCreateDTO();
         clientRequestDTO.setId(1234567890L);
         clientRequestDTO.setFirstName("John");
         clientRequestDTO.setLastName("Doe");

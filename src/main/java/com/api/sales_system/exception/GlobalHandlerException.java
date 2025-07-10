@@ -1,6 +1,7 @@
 package com.api.sales_system.exception;
 
 import org.springframework.boot.autoconfigure.batch.BatchTaskExecutor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -38,4 +39,11 @@ public class GlobalHandlerException {
         ErrorMessage errorMessage = new ErrorMessage(e.getMessage());
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorMessage> handleDataIntegrityViolationException(){
+        ErrorMessage errorMessage = new ErrorMessage("El número de celular o el correo electrónico ya existen en el sistéma.");
+        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+
 }
