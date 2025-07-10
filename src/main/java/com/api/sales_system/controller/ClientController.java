@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class ClientController {
     })
     public ResponseEntity<ClientResponseDTO> createClient(@Valid @RequestBody ClientRequestDTO clientRequestDTO) {
         ClientResponseDTO clientResponseDTO = this.clientServiceImpl.createClient(clientRequestDTO);
-        return ResponseEntity.ok(clientResponseDTO);
+        return new ResponseEntity<>(clientResponseDTO, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -55,7 +56,7 @@ public class ClientController {
             @Parameter(description = "Document ID of the client to delete", example = "1234567890")
             @PathVariable Long id) {
         this.clientServiceImpl.deleteClientById(id);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -71,7 +72,7 @@ public class ClientController {
             @Parameter(description = "Document ID of the client to retrieve", example = "1234567890")
             @PathVariable Long id) {
         ClientResponseDTO clientResponseDTO = this.clientServiceImpl.getClientById(id);
-        return ResponseEntity.ok(clientResponseDTO);
+        return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping
@@ -85,6 +86,6 @@ public class ClientController {
     })
     public ResponseEntity<List<ClientResponseDTO>> getClients() {
         List<ClientResponseDTO> clientsResponseDTOS = this.clientServiceImpl.getClients();
-        return ResponseEntity.ok(clientsResponseDTOS);
+        return new ResponseEntity<>(clientsResponseDTOS, HttpStatus.OK);
     }
 }
