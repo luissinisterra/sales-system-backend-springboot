@@ -62,7 +62,6 @@ public class ClientServiceImpl implements ClientService {
 
         if (clientOpt.isEmpty()) throw new ResourceNotFoundException("El cliente con el id: " + id + " no fué encontrado.");
 
-        clientOpt.get().setId(id);
         clientOpt.get().setFirstName(clientUpdateDTO.getFirstName());
         clientOpt.get().setLastName(clientUpdateDTO.getLastName());
         clientOpt.get().setPhoneNumber(clientUpdateDTO.getPhoneNumber());

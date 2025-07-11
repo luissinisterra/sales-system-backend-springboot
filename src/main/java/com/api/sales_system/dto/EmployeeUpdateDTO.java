@@ -10,10 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeResponseDTO {
-
-    @NotBlank(message = "El id no puede ser negativo.")
-    private Long id;
+public class EmployeeUpdateDTO {
 
     @NotBlank(message = "El nombre es obligatorio.")
     private String firstName;

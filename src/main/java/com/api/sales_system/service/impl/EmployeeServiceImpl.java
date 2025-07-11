@@ -1,12 +1,13 @@
 package com.api.sales_system.service.impl;
 
-import com.api.sales_system.dto.EmployeeCreateDTO;
-import com.api.sales_system.dto.EmployeeResponseDTO;
+import com.api.sales_system.dto.*;
 import com.api.sales_system.entity.Employee;
+import com.api.sales_system.exception.CurrentPasswordInvalidException;
 import com.api.sales_system.exception.ResourceNotFoundException;
 import com.api.sales_system.mapper.EmployeeMapper;
 import com.api.sales_system.repository.EmployeeRepository;
 import com.api.sales_system.service.EmployeeService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,11 +58,64 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public EmployeeResponseDTO updateEmployee(Long id, EmployeeUpdateDTO employeeUpdateDTO) {
+        Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
+
+        if (employeeOpt.isEmpty()) throw new ResourceNotFoundException("El empleado con el id: " + id + " no fué encontrado.");
+
+        employeeOpt.get().setFirstName(employeeUpdateDTO.getFirstName());
+        employeeOpt.get().setLastName(employeeUpdateDTO.getLastName());
+        employeeOpt.get().setRole(employeeUpdateDTO.getRole());
+        employeeOpt.get().setUserName(employeeUpdateDTO.getUserName());
+
+        return this.employeeMapper.toResponseDTO(this.employeeRepository.save(employeeOpt.get()));
+    }
+
+    @Override
     public List<EmployeeResponseDTO> getEmployees() {
         List<Employee> employees = this.employeeRepository.findAll();
 
         if (employees.isEmpty()) throw new ResourceNotFoundException("Aun no hay empleados registrados en el sistema.");
 
         return this.employeeMapper.toResponseList(employees);
+    }
+
+    @Override
+    public void updateOwnProfile(Long id, UpdateProfileRequestDTO updateProfileRequestDTO) {
+        Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
+
+        if (employeeOpt.isEmpty()) throw new ResourceNotFoundException("El empleado con el id: " + id + " no fué encontrado.");
+
+        employeeOpt.get().setFirstName(updateProfileRequestDTO.getFirstName());
+        employeeOpt.get().setLastName(updateProfileRequestDTO.getLastName());
+        employeeOpt.get().setUserName(updateProfileRequestDTO.getUserName());
+
+        this.employeeRepository.save(employeeOpt.get());
+    }
+
+    @Override
+    public void changePassword(Long id, ChangePasswordRequestDTO changePasswordRequestDTO) {
+        Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
+
+        if (employeeOpt.isEmpty()) throw new ResourceNotFoundException("El empleado con el id: " + id + " no fué encontrado.");
+
+        boolean match = this.passwordEncoder.matches(changePasswordRequestDTO.getCurrentPassword(), employeeOpt.get().getPassword());
+
+        if (!match) throw new CurrentPasswordInvalidException("Contraseña actual incorrecta");
+
+        employeeOpt.get().setPassword(changePasswordRequestDTO.getNewPassword());
+    }
+
+    @Override
+    public void resetPassword(Long id, ResetPasswordRequestDTO resetPasswordRequestDTO) {
+        Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
+
+        if (employeeOpt.isEmpty()) throw new ResourceNotFoundException("El empleado con el id: " + id + " no fué encontrado.");
+
+        String encodedPassword = this.passwordEncoder.encode(resetPasswordRequestDTO.getNewPassword());
+
+        employeeOpt.get().setPassword(encodedPassword);
+
+        this.employeeRepository.save(employeeOpt.get());
     }
 }

@@ -3,6 +3,7 @@ package com.api.sales_system.controller;
 import com.api.sales_system.dto.ClientCreateDTO;
 import com.api.sales_system.dto.ClientResponseDTO;
 import com.api.sales_system.dto.ClientUpdateDTO;
+import com.api.sales_system.service.ClientService;
 import com.api.sales_system.service.impl.ClientServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,7 +24,7 @@ import java.util.List;
 @Tag(name = "Clients", description = "Endpoints for managing clients in the Sales System")
 public class ClientController {
 
-    private final ClientServiceImpl clientServiceImpl;
+    private final ClientService clientServiceImpl;
 
     @Autowired
     public ClientController(ClientServiceImpl clientServiceImpl) {
@@ -41,7 +43,8 @@ public class ClientController {
     })
     public ResponseEntity<ClientResponseDTO> createClient(@Valid @RequestBody ClientCreateDTO clientRequestDTO) {
         ClientResponseDTO clientResponseDTO = this.clientServiceImpl.createClient(clientRequestDTO);
-        return new ResponseEntity<>(clientResponseDTO, HttpStatus.CREATED);
+        URI location = URI.create("/api/v1/clients/" + clientResponseDTO.getId());
+        return ResponseEntity.created(location).body(clientResponseDTO);
     }
 
     @DeleteMapping("/{id}")
