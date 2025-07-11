@@ -59,7 +59,7 @@ public class ClientController {
     })
     public ResponseEntity<MessageResponseDTO> deleteClient(
             @Parameter(description = "Document ID of the client to delete", example = "1234567890")
-            @PathVariable Long id) {
+            @PathVariable String id) {
         this.clientServiceImpl.deleteClientById(id);
         return ResponseEntity.ok(new MessageResponseDTO("El cliente fué eliminado exitosamente."));
     }
@@ -75,7 +75,7 @@ public class ClientController {
     })
     public ResponseEntity<ClientResponseDTO> getClient(
             @Parameter(description = "Document ID of the client to retrieve", example = "1234567890")
-            @PathVariable Long id) {
+            @PathVariable String id) {
         ClientResponseDTO clientResponseDTO = this.clientServiceImpl.getClientById(id);
         return ResponseEntity.ok(clientResponseDTO);
     }
@@ -91,7 +91,7 @@ public class ClientController {
     })
     public ResponseEntity<ClientResponseDTO> updateClient(
             @Parameter(description = "Document ID of the client to retrieve", example = "1234567890")
-            @PathVariable Long id, @Valid @RequestBody ClientUpdateDTO clientUpdateDTO){
+            @PathVariable String id, @Valid @RequestBody ClientUpdateDTO clientUpdateDTO){
         ClientResponseDTO clientResponseDTO = this.clientServiceImpl.updateClient(id, clientUpdateDTO);
         return ResponseEntity.ok(clientResponseDTO);
     }
