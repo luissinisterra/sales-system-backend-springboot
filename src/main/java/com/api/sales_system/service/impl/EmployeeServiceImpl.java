@@ -7,7 +7,7 @@ import com.api.sales_system.exception.ResourceNotFoundException;
 import com.api.sales_system.mapper.EmployeeMapper;
 import com.api.sales_system.repository.EmployeeRepository;
 import com.api.sales_system.service.EmployeeService;
-import org.apache.coyote.BadRequestException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public EmployeeResponseDTO createEmployee(EmployeeCreateDTO employeeCreateDTO) {
         Employee employee = this.employeeMapper.toEntity(employeeCreateDTO);
         String encodedPassword = this.passwordEncoder.encode(employee.getPassword());
@@ -40,6 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public void deleteEmployeeById(Long id) {
         Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
 
@@ -58,6 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public EmployeeResponseDTO updateEmployee(Long id, EmployeeUpdateDTO employeeUpdateDTO) {
         Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
 
@@ -75,12 +78,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeResponseDTO> getEmployees() {
         List<Employee> employees = this.employeeRepository.findAll();
 
-        if (employees.isEmpty()) throw new ResourceNotFoundException("No se encontraron registrados en el sistema.");
+        if (employees.isEmpty()) return List.of();
 
         return this.employeeMapper.toResponseList(employees);
     }
 
     @Override
+    @Transactional
     public void updateOwnProfile(Long id, UpdateProfileRequestDTO updateProfileRequestDTO) {
         Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
 
@@ -94,6 +98,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public void changePassword(Long id, ChangePasswordRequestDTO changePasswordRequestDTO) {
         Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
 
@@ -101,12 +106,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         boolean match = this.passwordEncoder.matches(changePasswordRequestDTO.getCurrentPassword(), employeeOpt.get().getPassword());
 
-        if (!match) throw new CurrentPasswordInvalidException("Contraseña actual incorrecta");
+        if (!match) throw new CurrentPasswordInvalidException("Contraseña actual incorrecta.");
 
-        employeeOpt.get().setPassword(changePasswordRequestDTO.getNewPassword());
+        String newEncodedPassword = this.passwordEncoder.encode(changePasswordRequestDTO.getNewPassword());
+
+        employeeOpt.get().setPassword(newEncodedPassword);
+
+        this.employeeRepository.save(employeeOpt.get());
     }
 
     @Override
+    @Transactional
     public void resetPassword(Long id, ResetPasswordRequestDTO resetPasswordRequestDTO) {
         Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
 

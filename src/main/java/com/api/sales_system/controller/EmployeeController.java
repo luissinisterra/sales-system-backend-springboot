@@ -40,7 +40,7 @@ public class EmployeeController {
     })
     public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeCreateDTO employeeRequestDTO) {
         EmployeeResponseDTO employeeResponseDTO = this.employeeService.createEmployee(employeeRequestDTO);
-        URI location = URI.create("/api/v1/employees/" + employeeResponseDTO.getId());
+        URI location = URI.create("/api/v2/employees/" + employeeResponseDTO.getId());
         return ResponseEntity.created(location).body(employeeResponseDTO);
     }
 

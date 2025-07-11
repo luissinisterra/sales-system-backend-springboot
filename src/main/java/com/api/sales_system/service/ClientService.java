@@ -10,8 +10,8 @@ import java.util.List;
 @Service
 public interface ClientService {
     ClientResponseDTO createClient(ClientCreateDTO clientCreateDTO);
-    void deleteClientById(Long id);
-    ClientResponseDTO getClientById(Long id);
-    ClientResponseDTO updateClient(Long id, ClientUpdateDTO clientUpdateDTO);
+    void deleteClientById(String id);
+    ClientResponseDTO getClientById(String id);
+    ClientResponseDTO updateClient(String id, ClientUpdateDTO clientUpdateDTO);
     List<ClientResponseDTO> getClients();
 }

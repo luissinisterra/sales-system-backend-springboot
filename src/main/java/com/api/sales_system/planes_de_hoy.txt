@@ -1,4 +1,0 @@
-Funcionalidades para realizar hoy:
-    1. Implementación de swagger para el controlador de los empleados.
-    2. Refactorización en los métodos delete para todos los controladores.
-    3. Implementación de la gestión de productos (controlador, servicio y dtos)

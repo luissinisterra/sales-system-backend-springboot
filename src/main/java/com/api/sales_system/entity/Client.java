@@ -1,9 +1,7 @@
 package com.api.sales_system.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,9 +14,10 @@ import lombok.NoArgsConstructor;
 public class Client {
 
     @Id
-    @Min(value = 10, message = "El docúmento no puede ser negativo y de mínimo de 10 dígitos.")
-    @Column(name = "id", length = 10, unique = true)
-    private Long id;
+    @NotBlank(message = "El documento es obligatorio.")
+    @Pattern(regexp = "^[0-9]{11,}$", message = "El documento debe contener solo números y tener más de 10 dígitos.")
+    @Column(name = "id", unique = true, nullable = false, length = 20)
+    private String id;
 
     @NotBlank(message = "El nombre es obligatorio.")
     @Column(name = "first_name", nullable = false)

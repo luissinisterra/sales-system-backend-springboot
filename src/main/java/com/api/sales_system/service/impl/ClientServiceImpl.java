@@ -11,6 +11,7 @@ import com.api.sales_system.repository.ClientRepository;
 import com.api.sales_system.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public ClientResponseDTO createClient(ClientCreateDTO clientCreateDTO) {
         Optional<Client> clientOpt = this.clientRepository.findById(clientCreateDTO.getId());
 
@@ -39,7 +41,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void deleteClientById(Long id) {
+    @Transactional
+    public void deleteClientById(String id) {
         Optional<Client> clientOpt = this.clientRepository.findById(id);
 
         if(clientOpt.isEmpty()) throw new ResourceNotFoundException("El cliente con el id: " + id + " no fué encontrado.");
@@ -48,7 +51,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientResponseDTO getClientById(Long id) {
+    public ClientResponseDTO getClientById(String id) {
         Optional<Client> clientOpt = this.clientRepository.findById(id);
 
         if (clientOpt.isEmpty()) throw new ResourceNotFoundException("El cliente con el id: " + id + " no fué encontrado.");
@@ -57,7 +60,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientResponseDTO updateClient(Long id, ClientUpdateDTO clientUpdateDTO){
+    @Transactional
+    public ClientResponseDTO updateClient(String id, ClientUpdateDTO clientUpdateDTO){
         Optional<Client> clientOpt = this.clientRepository.findById(id);
 
         if (clientOpt.isEmpty()) throw new ResourceNotFoundException("El cliente con el id: " + id + " no fué encontrado.");
@@ -75,7 +79,7 @@ public class ClientServiceImpl implements ClientService {
     public List<ClientResponseDTO> getClients() {
         List<Client> clients = this.clientRepository.findAll();
 
-        if (clients.isEmpty()) throw new ResourceNotFoundException("No se encontraron clientes registrados en el sistema.");
+        if (clients.isEmpty()) return List.of();
 
         return this.clientMapper.toResponseList(clients);
     }

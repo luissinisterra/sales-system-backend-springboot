@@ -10,6 +10,7 @@ import com.api.sales_system.repository.ProductRepository;
 import com.api.sales_system.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,12 +28,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponseDTO createProduct(ProductCreateDTO productCreateDTO) {
         Product product = this.productMapper.toEntity(productCreateDTO);
         return this.productMapper.toResponseDTO(this.productRepository.save(product));
     }
 
     @Override
+    @Transactional
     public void deleteProductById(Long id) {
         Optional<Product> productOpt = this.productRepository.findById(id);
 
@@ -51,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponseDTO updateClient(Long id, ProductUpdateDTO productUpdateDTO) {
         Optional<Product> productOpt = this.productRepository.findById(id);
 
@@ -68,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductResponseDTO> getProducts() {
         List<Product> products = this.productRepository.findAll();
 
-        if (products.isEmpty()) throw new ResourceNotFoundException("No se encontraron productos registrados en el sistéma.");
+        if (products.isEmpty()) return List.of();
 
         return this.productMapper.toResponseList(products);
     }

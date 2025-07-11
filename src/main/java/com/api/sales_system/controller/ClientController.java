@@ -44,7 +44,7 @@ public class ClientController {
     })
     public ResponseEntity<ClientResponseDTO> createClient(@Valid @RequestBody ClientCreateDTO clientRequestDTO) {
         ClientResponseDTO clientResponseDTO = this.clientServiceImpl.createClient(clientRequestDTO);
-        URI location = URI.create("/api/v1/clients/" + clientResponseDTO.getId());
+        URI location = URI.create("/api/v2/clients/" + clientResponseDTO.getId());
         return ResponseEntity.created(location).body(clientResponseDTO);
     }
 
