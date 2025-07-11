@@ -75,7 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeResponseDTO> getEmployees() {
         List<Employee> employees = this.employeeRepository.findAll();
 
-        if (employees.isEmpty()) throw new ResourceNotFoundException("Aun no hay empleados registrados en el sistema.");
+        if (employees.isEmpty()) throw new ResourceNotFoundException("No se encontraron registrados en el sistema.");
 
         return this.employeeMapper.toResponseList(employees);
     }

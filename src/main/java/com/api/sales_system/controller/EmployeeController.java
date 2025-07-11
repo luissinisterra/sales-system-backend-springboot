@@ -17,7 +17,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/employees")
+@RequestMapping("api/v2/employees")
 @Tag(name = "Employees", description = "Endpoints for managing employees in the Sales System")
 public class EmployeeController {
 
@@ -53,11 +53,11 @@ public class EmployeeController {
             @ApiResponse(responseCode = "200", description = "Employee deleted successfully."),
             @ApiResponse(responseCode = "404", description = "Employee not found.")
     })
-    public ResponseEntity<Void> deleteEmployee(
+    public ResponseEntity<MessageResponseDTO> deleteEmployee(
             @Parameter(description = "ID of the employee to delete.", example = "1")
             @PathVariable Long id) {
         this.employeeService.deleteEmployeeById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new MessageResponseDTO("El empleado fué eliminado exitosamente."));
     }
 
     @GetMapping("{id}")

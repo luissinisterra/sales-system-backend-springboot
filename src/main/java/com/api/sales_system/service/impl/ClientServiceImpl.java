@@ -75,7 +75,7 @@ public class ClientServiceImpl implements ClientService {
     public List<ClientResponseDTO> getClients() {
         List<Client> clients = this.clientRepository.findAll();
 
-        if (clients.isEmpty()) throw new ResourceNotFoundException("Aun no hay clientes registrados en el sistema.");
+        if (clients.isEmpty()) throw new ResourceNotFoundException("No se encontraron clientes registrados en el sistema.");
 
         return this.clientMapper.toResponseList(clients);
     }

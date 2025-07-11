@@ -1,7 +1,10 @@
-package com.api.sales_system.entity;
+package com.api.sales_system.dto;
 
 import com.api.sales_system.enums.Category;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,29 +15,21 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "products")
-public class Product {
+public class ProductResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotBlank(message = "El id no puede ser negativo.")
     private Long id;
 
     @NotBlank(message = "El nombre es obligaotorio.")
-    @Column(name = "name", nullable = false)
     private String name;
 
     @Min(value = 0, message = "El precio no puede ser un número negativo.")
-    @Column(name = "price", nullable = false)
     private double price;
 
     @NotNull(message = "La categoría es obligatoria.")
-    @Enumerated(EnumType.STRING)
-    @Column(name = "category", nullable = false)
     private Category category;
 
     @Min(value = 0, message = "Las existencias no pueden ser negativas.")
-    @Column(name = "stock", nullable = false)
     private int stock;
 
 }

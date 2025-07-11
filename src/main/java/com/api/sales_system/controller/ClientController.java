@@ -3,6 +3,7 @@ package com.api.sales_system.controller;
 import com.api.sales_system.dto.ClientCreateDTO;
 import com.api.sales_system.dto.ClientResponseDTO;
 import com.api.sales_system.dto.ClientUpdateDTO;
+import com.api.sales_system.dto.MessageResponseDTO;
 import com.api.sales_system.service.ClientService;
 import com.api.sales_system.service.impl.ClientServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +21,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/clients")
+@RequestMapping("api/v2/clients")
 @Tag(name = "Clients", description = "Endpoints for managing clients in the Sales System")
 public class ClientController {
 
@@ -56,11 +57,11 @@ public class ClientController {
             @ApiResponse(responseCode = "200", description = "Client deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Client not found")
     })
-    public ResponseEntity<Void> deleteClient(
+    public ResponseEntity<MessageResponseDTO> deleteClient(
             @Parameter(description = "Document ID of the client to delete", example = "1234567890")
             @PathVariable Long id) {
         this.clientServiceImpl.deleteClientById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(new MessageResponseDTO("El cliente fué eliminado exitosamente."));
     }
 
     @GetMapping("/{id}")
@@ -76,7 +77,7 @@ public class ClientController {
             @Parameter(description = "Document ID of the client to retrieve", example = "1234567890")
             @PathVariable Long id) {
         ClientResponseDTO clientResponseDTO = this.clientServiceImpl.getClientById(id);
-        return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
+        return ResponseEntity.ok(clientResponseDTO);
     }
 
     @PutMapping("{id}")
@@ -92,7 +93,7 @@ public class ClientController {
             @Parameter(description = "Document ID of the client to retrieve", example = "1234567890")
             @PathVariable Long id, @Valid @RequestBody ClientUpdateDTO clientUpdateDTO){
         ClientResponseDTO clientResponseDTO = this.clientServiceImpl.updateClient(id, clientUpdateDTO);
-        return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
+        return ResponseEntity.ok(clientResponseDTO);
     }
 
     @GetMapping
@@ -106,7 +107,7 @@ public class ClientController {
     })
     public ResponseEntity<List<ClientResponseDTO>> getClients() {
         List<ClientResponseDTO> clientsResponseDTOS = this.clientServiceImpl.getClients();
-        return new ResponseEntity<>(clientsResponseDTOS, HttpStatus.OK);
+        return ResponseEntity.ok(clientsResponseDTOS);
     }
 }
 
