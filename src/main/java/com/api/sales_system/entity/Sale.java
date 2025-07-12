@@ -20,19 +20,17 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
-    @NotNull(message = "La fecha de creación es obligatoria.")
     @Column(name = "date_sale", nullable = false)
     private LocalDateTime dateSale;
 
-    @Min(value = 0, message = "El precio total no puede ser negativo.")
     @Column(name = "total_price", nullable = false)
     private double totalPrice;
 

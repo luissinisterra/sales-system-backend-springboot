@@ -27,15 +27,12 @@ public class SaleDetail {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Min(value = 0, message = "La cantidad no puede ser negativa.")
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Min(value = 0, message = "El precio unitario no puede ser negativo.")
     @Column(name = "unit_price", nullable = false)
     private BigDecimal unitPrice;
 
-    @Min(value = 0, message = "El precio subtotal no puede ser negativo.")
     @Column(name = "sub_total", nullable = false)
     private BigDecimal subTotal;
 

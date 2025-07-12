@@ -28,7 +28,7 @@ public class ProviderProduct {
     @Column(name = "category", nullable = false)
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "provider_id", nullable = false)
     private Provider provider;
 
