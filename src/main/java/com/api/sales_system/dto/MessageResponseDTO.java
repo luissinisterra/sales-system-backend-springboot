@@ -13,4 +13,5 @@ public class MessageResponseDTO {
 
     @Schema(description = "Text message returned by the API.", example = "El recurso fue eliminado correctamente.")
     private String message;
+
 }

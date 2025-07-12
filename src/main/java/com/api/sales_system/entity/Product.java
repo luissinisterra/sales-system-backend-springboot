@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,20 +21,16 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre es obligaotorio.")
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Min(value = 0, message = "El precio no puede ser un número negativo.")
     @Column(name = "price", nullable = false)
     private double price;
 
-    @NotNull(message = "La categoría es obligatoria.")
     @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
     private Category category;
 
-    @Min(value = 0, message = "Las existencias no pueden ser negativas.")
     @Column(name = "stock", nullable = false)
     private int stock;
 

@@ -19,15 +19,12 @@ public class ProviderProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre es obligaotorio.")
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Min(value = 0, message = "El precio no puede ser un número negativo.")
     @Column(name = "price", nullable = false)
     private double price;
 
-    @NotBlank(message = "La categoría es obligatoria.")
     @Column(name = "category", nullable = false)
     private Category category;
 

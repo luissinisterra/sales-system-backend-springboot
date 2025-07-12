@@ -20,16 +20,12 @@ public class Provider {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre es obligatorio.")
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotBlank(message = "El número de celular es obligatorio.")
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
-    @NotBlank(message = "El correo electrónico es obligatorio.")
-    @Email(message = "Formato de correo electrónico inválido.")
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
