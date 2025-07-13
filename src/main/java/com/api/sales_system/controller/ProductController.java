@@ -127,19 +127,19 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/category/{category}")
+    @GetMapping("/category/{categoryName}")
     @Operation(
-            summary = "Get products by category",
+            summary = "Get products by category name",
             description = "Retrieves all products belonging to a specific category."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Products retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "No products found in the specified category")
     })
-    public ResponseEntity<List<ProductResponseDTO>> getProductsByCategory(
+    public ResponseEntity<List<ProductResponseDTO>> getProductsByCategoryName(
             @Parameter(description = "Category name to filter by", example = "Electronics")
-            @PathVariable String category) {
-        List<ProductResponseDTO> products = this.productService.getProductsByCategoryName(category);
+            @PathVariable String categoryName) {
+        List<ProductResponseDTO> products = this.productService.getProductsByCategoryName(categoryName);
         return ResponseEntity.ok(products);
     }
 
