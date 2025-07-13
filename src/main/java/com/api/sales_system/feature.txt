@@ -1,4 +1,0 @@
-Implementacion de hoy:
-
-    1. Implementare el controlador y el servicio que se encargara de la informacion de los proveedores del sistema
-    2. Le agregare la documentacion de el controlador con swagger
