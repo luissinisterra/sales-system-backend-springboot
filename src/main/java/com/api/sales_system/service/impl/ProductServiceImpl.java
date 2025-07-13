@@ -46,7 +46,6 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository.deleteById(id);
     }
 
-    // Corregido: cambié el nombre del método de getClientById a getProductById
     @Override
     public ProductResponseDTO getProductById(Long id) {
         Optional<Product> productOpt = this.productRepository.findById(id);
@@ -57,7 +56,6 @@ public class ProductServiceImpl implements ProductService {
         return this.productMapper.toResponseDTO(productOpt.get());
     }
 
-    // Corregido: cambié el nombre del método de updateClient a updateProduct
     @Override
     @Transactional
     public ProductResponseDTO updateProduct(Long id, ProductUpdateDTO productUpdateDTO) {
@@ -98,18 +96,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDTO> getProductsByCategory(String category) {
-        List<Product> products = this.productRepository.findByCategoryIgnoreCase(category);
-
-        if (products.isEmpty())
-            return List.of();
-
-        return this.productMapper.toResponseList(products);
-    }
-
-    @Override
-    public List<ProductResponseDTO> getProductsByProvider(Long providerId) {
-        List<Product> products = this.productRepository.findByProviderId(providerId);
+    public List<ProductResponseDTO> getProductsByCategoryName(String categoryName) {
+        List<Product> products = this.productRepository.findByCategory_NameIgnoreCase(categoryName);
 
         if (products.isEmpty())
             return List.of();
@@ -163,7 +151,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponseDTO> getTopExpensiveProducts(Integer limit) {
-        List<Product> products = this.productRepository.findTopByOrderByPriceDesc(limit);
+        List<Product> products = this.productRepository.findTopByOrderByPriceDesc();
 
         if (products.isEmpty())
             return List.of();
@@ -179,10 +167,5 @@ public class ProductServiceImpl implements ProductService {
             return List.of();
 
         return categories;
-    }
-
-    @Override
-    public Long countProductsByCategory(String category) {
-        return this.productRepository.countByCategoryIgnoreCase(category);
     }
 }

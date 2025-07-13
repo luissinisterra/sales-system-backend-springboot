@@ -18,13 +18,12 @@ public interface ProductService {
 
     // Métodos de búsqueda y filtrado
     List<ProductResponseDTO> searchProductsByName(String name);
-    List<ProductResponseDTO> getProductsByCategory(String category);
-    List<ProductResponseDTO> getProductsByProvider(Long providerId);
+    List<ProductResponseDTO> getProductsByCategoryName(String categoryName); // ← corregido
     List<ProductResponseDTO> getProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice);
     List<ProductResponseDTO> getProductsWithLowStock(Integer threshold);
     List<ProductResponseDTO> getOutOfStockProducts();
     List<ProductResponseDTO> getAvailableProducts();
     List<ProductResponseDTO> getTopExpensiveProducts(Integer limit);
     List<String> getAllCategories();
-    Long countProductsByCategory(String category);
+
 }

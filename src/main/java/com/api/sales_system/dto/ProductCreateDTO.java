@@ -1,6 +1,6 @@
 package com.api.sales_system.dto;
 
-import com.api.sales_system.enums.Category;
+import com.api.sales_system.entity.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -25,8 +25,7 @@ public class ProductCreateDTO {
 
     @Schema(
             description = "Product category. Must match one of the allowed enum values.",
-            example = "BEVERAGE",
-            implementation = Category.class
+            example = "BEVERAGE"
     )
     @NotNull(message = "La categoría es obligatoria.")
     private Category category;

@@ -84,7 +84,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryOpt.get().setName(categoryUpdateDTO.getName());
         categoryOpt.get().setDescription(categoryUpdateDTO.getDescription());
-        categoryOpt.get().setActive(categoryUpdateDTO.getActive());
+        categoryOpt.get().setActive(categoryUpdateDTO.isActive());
 
         return this.categoryMapper.toResponseDTO(this.categoryRepository.save(categoryOpt.get()));
     }

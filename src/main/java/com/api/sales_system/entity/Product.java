@@ -22,7 +22,7 @@ public class Product {
     @Column(name = "price", nullable = false)
     private double price;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 

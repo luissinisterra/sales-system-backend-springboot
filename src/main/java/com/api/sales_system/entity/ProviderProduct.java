@@ -1,9 +1,6 @@
 package com.api.sales_system.entity;
 
-import com.api.sales_system.enums.Category;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +22,8 @@ public class ProviderProduct {
     @Column(name = "price", nullable = false)
     private double price;
 
-    @Column(name = "category", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne(optional = false)

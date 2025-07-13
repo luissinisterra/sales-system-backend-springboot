@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "categories")
 public class Category {
 
     @Id
@@ -22,11 +23,11 @@ public class Category {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String description;
 
     @Column(name = "active")
-    private Boolean active = true;
+    private boolean active = true;
 
     @CreationTimestamp
     @Column(name = "created_at")

@@ -139,23 +139,7 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDTO>> getProductsByCategory(
             @Parameter(description = "Category name to filter by", example = "Electronics")
             @PathVariable String category) {
-        List<ProductResponseDTO> products = this.productService.getProductsByCategory(category);
-        return ResponseEntity.ok(products);
-    }
-
-    @GetMapping("/provider/{providerId}")
-    @Operation(
-            summary = "Get products by provider",
-            description = "Retrieves all products supplied by a specific provider."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Products retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "No products found for the specified provider")
-    })
-    public ResponseEntity<List<ProductResponseDTO>> getProductsByProvider(
-            @Parameter(description = "Provider ID to filter by", example = "1")
-            @PathVariable Long providerId) {
-        List<ProductResponseDTO> products = this.productService.getProductsByProvider(providerId);
+        List<ProductResponseDTO> products = this.productService.getProductsByCategoryName(category);
         return ResponseEntity.ok(products);
     }
 
@@ -251,19 +235,4 @@ public class ProductController {
         return ResponseEntity.ok(categories);
     }
 
-    @GetMapping("/count/category/{category}")
-    @Operation(
-            summary = "Count products by category",
-            description = "Returns the count of products in a specific category."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Product count retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Category not found")
-    })
-    public ResponseEntity<Long> countProductsByCategory(
-            @Parameter(description = "Category name to count", example = "Electronics")
-            @PathVariable String category) {
-        Long count = this.productService.countProductsByCategory(category);
-        return ResponseEntity.ok(count);
-    }
 }

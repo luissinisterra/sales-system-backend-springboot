@@ -15,11 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // Búsqueda por nombre (case-insensitive, partial match)
     List<Product> findByNameContainingIgnoreCase(String name);
 
-    // Búsqueda por categoría (case-insensitive)
-    List<Product> findByCategoryIgnoreCase(String category);
-
-    // Búsqueda por proveedor
-    List<Product> findByProviderId(Long providerId);
+    // Búsqueda por nombre de categoría (case-insensitive) usando propiedad anidada
+    List<Product> findByCategory_NameIgnoreCase(String categoryName);
 
     // Búsqueda por rango de precios
     List<Product> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
@@ -34,16 +31,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByStockGreaterThan(Integer stock);
 
     // Productos más caros (usando consulta personalizada para el límite)
+    // Nota: Aquí el parámetro "limit" no es utilizado directamente en JPQL, por eso puede ser mejor usar Pageable
     @Query("SELECT p FROM Product p ORDER BY p.price DESC")
-    List<Product> findTopByOrderByPriceDesc(@Param("limit") Integer limit);
+    List<Product> findTopByOrderByPriceDesc();
 
-    // Otra opción para los productos más caros usando Pageable
-    // List<Product> findAllByOrderByPriceDesc(Pageable pageable);
-
-    // Obtener todas las categorías únicas
-    @Query("SELECT DISTINCT p.category FROM Product p WHERE p.category IS NOT NULL ORDER BY p.category")
+    // Obtener todas las categorías únicas (solo nombres de categorías)
+    @Query("SELECT DISTINCT p.category.name FROM Product p WHERE p.category IS NOT NULL ORDER BY p.category.name")
     List<String> findDistinctCategories();
 
-    // Contar productos por categoría
-    Long countByCategoryIgnoreCase(String category);
 }
