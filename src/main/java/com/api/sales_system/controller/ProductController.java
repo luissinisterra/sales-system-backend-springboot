@@ -19,7 +19,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/products")
+@RequestMapping("api/v2/products")
 @Tag(name = "Products", description = "Endpoints for managing products in the Sales System")
 public class ProductController {
 
