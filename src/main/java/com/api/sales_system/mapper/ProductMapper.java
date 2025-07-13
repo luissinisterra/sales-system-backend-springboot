@@ -11,6 +11,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
     Product toEntity(ProductCreateDTO productCreateDTO);
+
     ProductResponseDTO toResponseDTO(Product product);
+
     List<ProductResponseDTO> toResponseList(List<Product> products);
 }

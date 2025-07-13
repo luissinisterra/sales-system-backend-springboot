@@ -12,11 +12,21 @@ import java.util.List;
 @NoArgsConstructor
 public class ProviderResponseDTO {
 
-    private String name;
+    private Long id;
+
+    private String companyName;
+
+    private String contactPerson;
 
     private String phoneNumber;
 
     private String email;
+
+    private String address;
+
+    private String city;
+
+    private String country;
 
     private List<ProviderProduct> providerProducts;
 

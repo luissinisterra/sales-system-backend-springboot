@@ -10,6 +10,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ClientMapper {
     Client toEntity(ClientCreateDTO clientCreateDTO);
+
     ClientResponseDTO toResponseDTO(Client client);
+
     List<ClientResponseDTO> toResponseList(List<Client> clients);
 }

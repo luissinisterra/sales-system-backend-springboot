@@ -10,6 +10,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
     Employee toEntity(EmployeeCreateDTO employeeCreateDTO);
+
     EmployeeResponseDTO toResponseDTO(Employee employee);
+
     List<EmployeeResponseDTO> toResponseList(List<Employee> employees);
 }
