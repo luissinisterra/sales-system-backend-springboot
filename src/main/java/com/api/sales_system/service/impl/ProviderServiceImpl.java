@@ -31,11 +31,6 @@ public class ProviderServiceImpl implements ProviderService {
     @Override
     @Transactional
     public ProviderResponseDTO createProvider(ProviderCreateDTO providerCreateDTO) {
-        Optional<Provider> providerOpt = this.providerRepository.findById(providerCreateDTO.getId());
-
-        if (providerOpt.isPresent())
-            throw new ResourceAlreadyExistsException("El proveedor con el id: " + providerOpt.get().getId() + " ya exíste en el sistéma.");
-
         Provider provider = this.providerMapper.toEntity(providerCreateDTO);
 
         return this.providerMapper.toResponseDTO(this.providerRepository.save(provider));

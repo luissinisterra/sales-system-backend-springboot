@@ -32,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductResponseDTO createProduct(ProductCreateDTO productCreateDTO) {
         Product product = this.productMapper.toEntity(productCreateDTO);
+
         return this.productMapper.toResponseDTO(this.productRepository.save(product));
     }
 

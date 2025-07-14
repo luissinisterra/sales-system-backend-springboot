@@ -9,11 +9,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProviderMapper {
-
     Provider toEntity(ProviderCreateDTO providerCreateDTO);
 
     ProviderResponseDTO toResponseDTO(Provider provider);
 
     List<ProviderResponseDTO> toResponseList(List<Provider> providers);
-
 }

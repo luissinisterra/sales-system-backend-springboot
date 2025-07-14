@@ -15,9 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ProviderCreateDTO {
 
-    @NotNull(message = "El ID es obligatorio.")
-    private Long id;
-
     @NotBlank(message = "El nombre de la empresa es obligatorio.")
     private String companyName;
 

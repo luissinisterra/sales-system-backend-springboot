@@ -31,12 +31,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryResponseDTO createCategory(CategoryCreateDTO categoryCreateDTO) {
-        Optional<Category> categoryOpt = this.categoryRepository.findByName(categoryCreateDTO.getName());
-
-        if (categoryOpt.isPresent()) {
-            throw new ResourceAlreadyExistsException("La categoría con el nombre: " + categoryCreateDTO.getName() + " ya existe en el sistema.");
-        }
-
         Category category = this.categoryMapper.toEntity(categoryCreateDTO);
 
         return this.categoryMapper.toResponseDTO(this.categoryRepository.save(category));
