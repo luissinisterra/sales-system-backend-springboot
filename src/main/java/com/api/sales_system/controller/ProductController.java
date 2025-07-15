@@ -5,6 +5,7 @@ import com.api.sales_system.dto.ProductCreateDTO;
 import com.api.sales_system.dto.ProductResponseDTO;
 import com.api.sales_system.dto.ProductUpdateDTO;
 import com.api.sales_system.service.ProductService;
+import com.api.sales_system.service.impl.ProductServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,11 +25,11 @@ import java.util.List;
 @Tag(name = "Products", description = "Endpoints for managing products in the Sales System")
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductService productServiceImpl;
 
     @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ProductController(ProductServiceImpl productServiceImpl) {
+        this.productServiceImpl = productServiceImpl;
     }
 
     @PostMapping
@@ -41,7 +42,7 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "Validation error - invalid input data")
     })
     public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductCreateDTO productCreateDTO) {
-        ProductResponseDTO productResponseDTO = this.productService.createProduct(productCreateDTO);
+        ProductResponseDTO productResponseDTO = this.productServiceImpl.createProduct(productCreateDTO);
         URI location = URI.create("/api/v2/products/" + productResponseDTO.getId());
         return ResponseEntity.created(location).body(productResponseDTO);
     }
@@ -58,7 +59,7 @@ public class ProductController {
     public ResponseEntity<MessageResponseDTO> deleteProduct(
             @Parameter(description = "ID of the product to delete", example = "1")
             @PathVariable Long id) {
-        this.productService.deleteProductById(id);
+        this.productServiceImpl.deleteProductById(id);
         return ResponseEntity.ok(new MessageResponseDTO("El producto fué eliminado exitosamente."));
     }
 
@@ -74,7 +75,7 @@ public class ProductController {
     public ResponseEntity<ProductResponseDTO> getProduct(
             @Parameter(description = "ID of the product to retrieve", example = "1")
             @PathVariable Long id) {
-        ProductResponseDTO productResponseDTO = this.productService.getProductById(id);
+        ProductResponseDTO productResponseDTO = this.productServiceImpl.getProductById(id);
         return ResponseEntity.ok(productResponseDTO);
     }
 
@@ -91,7 +92,7 @@ public class ProductController {
             @Parameter(description = "ID of the product to update", example = "1")
             @PathVariable Long id,
             @Valid @RequestBody ProductUpdateDTO productUpdateDTO) {
-        ProductResponseDTO productResponseDTO = this.productService.updateProduct(id, productUpdateDTO);
+        ProductResponseDTO productResponseDTO = this.productServiceImpl.updateProduct(id, productUpdateDTO);
         return ResponseEntity.ok(productResponseDTO);
     }
 
@@ -105,7 +106,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "No products found in the system")
     })
     public ResponseEntity<List<ProductResponseDTO>> getProducts() {
-        List<ProductResponseDTO> productResponseDTO = this.productService.getProducts();
+        List<ProductResponseDTO> productResponseDTO = this.productServiceImpl.getProducts();
         return ResponseEntity.ok(productResponseDTO);
     }
 
@@ -123,7 +124,7 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDTO>> searchProductsByName(
             @Parameter(description = "Product name to search for", example = "Laptop")
             @RequestParam String name) {
-        List<ProductResponseDTO> products = this.productService.searchProductsByName(name);
+        List<ProductResponseDTO> products = this.productServiceImpl.searchProductsByName(name);
         return ResponseEntity.ok(products);
     }
 
@@ -139,7 +140,7 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDTO>> getProductsByCategoryName(
             @Parameter(description = "Category name to filter by", example = "Electronics")
             @PathVariable String categoryName) {
-        List<ProductResponseDTO> products = this.productService.getProductsByCategoryName(categoryName);
+        List<ProductResponseDTO> products = this.productServiceImpl.getProductsByCategoryName(categoryName);
         return ResponseEntity.ok(products);
     }
 
@@ -157,7 +158,7 @@ public class ProductController {
             @RequestParam BigDecimal minPrice,
             @Parameter(description = "Maximum price", example = "100.00")
             @RequestParam BigDecimal maxPrice) {
-        List<ProductResponseDTO> products = this.productService.getProductsByPriceRange(minPrice, maxPrice);
+        List<ProductResponseDTO> products = this.productServiceImpl.getProductsByPriceRange(minPrice, maxPrice);
         return ResponseEntity.ok(products);
     }
 
@@ -173,7 +174,7 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDTO>> getProductsWithLowStock(
             @Parameter(description = "Stock threshold", example = "10")
             @RequestParam(defaultValue = "10") Integer threshold) {
-        List<ProductResponseDTO> products = this.productService.getProductsWithLowStock(threshold);
+        List<ProductResponseDTO> products = this.productServiceImpl.getProductsWithLowStock(threshold);
         return ResponseEntity.ok(products);
     }
 
@@ -187,7 +188,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "No out of stock products found")
     })
     public ResponseEntity<List<ProductResponseDTO>> getOutOfStockProducts() {
-        List<ProductResponseDTO> products = this.productService.getOutOfStockProducts();
+        List<ProductResponseDTO> products = this.productServiceImpl.getOutOfStockProducts();
         return ResponseEntity.ok(products);
     }
 
@@ -201,7 +202,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "No available products found")
     })
     public ResponseEntity<List<ProductResponseDTO>> getAvailableProducts() {
-        List<ProductResponseDTO> products = this.productService.getAvailableProducts();
+        List<ProductResponseDTO> products = this.productServiceImpl.getAvailableProducts();
         return ResponseEntity.ok(products);
     }
 
@@ -217,7 +218,7 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDTO>> getTopExpensiveProducts(
             @Parameter(description = "Number of products to retrieve", example = "5")
             @RequestParam(defaultValue = "10") Integer limit) {
-        List<ProductResponseDTO> products = this.productService.getTopExpensiveProducts(limit);
+        List<ProductResponseDTO> products = this.productServiceImpl.getTopExpensiveProducts(limit);
         return ResponseEntity.ok(products);
     }
 
@@ -231,7 +232,7 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "No categories found")
     })
     public ResponseEntity<List<String>> getProductCategories() {
-        List<String> categories = this.productService.getAllCategories();
+        List<String> categories = this.productServiceImpl.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 

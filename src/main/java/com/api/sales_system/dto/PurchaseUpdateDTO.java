@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PurchaseCreateDTO {
+public class PurchaseUpdateDTO {
 
     @NotNull(message = "El ID del proveedor es obligatorio.")
     private Long providerId;

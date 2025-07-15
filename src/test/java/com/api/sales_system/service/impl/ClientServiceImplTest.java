@@ -29,7 +29,7 @@ public class ClientServiceImplTest {
     @Test
     void createClientTest() {
         // Having
-        ClientCreateDTO clientRequestDTO = ClientTestDataBuilder.buildClientRequestDTO();
+        ClientCreateDTO clientRequestDTO = ClientTestDataBuilder.buildClientCreateDTO();
         Client client = ClientTestDataBuilder.buildClient();
 
         // Mocking the repository save

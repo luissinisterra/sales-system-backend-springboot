@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PurchaseDetailCreateDTO {
+public class PurchaseDetailUpdateDTO {
 
     @NotNull(message = "El ID del proveedor es obligatorio.")
     private Long providerId;

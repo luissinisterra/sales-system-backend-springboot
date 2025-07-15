@@ -1,5 +1,7 @@
 package com.api.sales_system.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +13,16 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class PurchaseDetailResponseDTO {
 
-    private String productName;
+    private Long id;
+
+    private Long providerId;
+
+    private Long productId;
 
     private int quantity;
 
-    private BigDecimal priceAtPurchase;
+    private BigDecimal unitPrice;
 
-    private BigDecimal subtotal;
+    private BigDecimal subTotal;
 
 }

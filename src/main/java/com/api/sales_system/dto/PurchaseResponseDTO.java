@@ -15,9 +15,9 @@ public class PurchaseResponseDTO {
 
     private Long id;
 
-    private String providerName;
+    private Long providerId;
 
-    private String employeeName;
+    private Long employeeId;
 
     private LocalDateTime purchaseDate;
 

@@ -2,6 +2,7 @@ package com.api.sales_system.controller;
 
 import com.api.sales_system.dto.*;
 import com.api.sales_system.service.EmployeeService;
+import com.api.sales_system.service.impl.EmployeeServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,11 +21,11 @@ import java.util.List;
 @Tag(name = "Employees", description = "Endpoints for managing employees in the Sales System")
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
+    private final EmployeeService employeeServiceImpl;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public EmployeeController(EmployeeServiceImpl employeeServiceImpl) {
+        this.employeeServiceImpl = employeeServiceImpl;
     }
 
     @PostMapping
@@ -38,7 +39,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "409", description = "Conflict - username already exists.")
     })
     public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeCreateDTO employeeRequestDTO) {
-        EmployeeResponseDTO employeeResponseDTO = this.employeeService.createEmployee(employeeRequestDTO);
+        EmployeeResponseDTO employeeResponseDTO = this.employeeServiceImpl.createEmployee(employeeRequestDTO);
         URI location = URI.create("/api/v2/employees/" + employeeResponseDTO.getId());
         return ResponseEntity.created(location).body(employeeResponseDTO);
     }
@@ -55,7 +56,7 @@ public class EmployeeController {
     public ResponseEntity<MessageResponseDTO> deleteEmployee(
             @Parameter(description = "ID of the employee to delete.", example = "1")
             @PathVariable Long id) {
-        this.employeeService.deleteEmployeeById(id);
+        this.employeeServiceImpl.deleteEmployeeById(id);
         return ResponseEntity.ok(new MessageResponseDTO("El empleado fué eliminado exitosamente."));
     }
 
@@ -71,7 +72,7 @@ public class EmployeeController {
     public ResponseEntity<EmployeeResponseDTO> getEmployee(
             @Parameter(description = "ID of the employee to retrieve.", example = "1")
             @PathVariable Long id) {
-        EmployeeResponseDTO employeeResponseDTO = this.employeeService.getEmployeeById(id);
+        EmployeeResponseDTO employeeResponseDTO = this.employeeServiceImpl.getEmployeeById(id);
         return ResponseEntity.ok(employeeResponseDTO);
 
     }
@@ -88,7 +89,7 @@ public class EmployeeController {
     public ResponseEntity<EmployeeResponseDTO> updateEmployee(
             @Parameter(description = "ID of the employee to retrieve.", example = "1")
             @PathVariable Long id, @Valid @RequestBody EmployeeUpdateDTO employeeUpdateDTO) {
-        EmployeeResponseDTO employeeResponseDTO = this.employeeService.updateEmployee(id, employeeUpdateDTO);
+        EmployeeResponseDTO employeeResponseDTO = this.employeeServiceImpl.updateEmployee(id, employeeUpdateDTO);
         return ResponseEntity.ok(employeeResponseDTO);
     }
 
@@ -102,7 +103,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "404", description = "There're not employees at system.")
     })
     public ResponseEntity<List<EmployeeResponseDTO>> getEmployees() {
-        List<EmployeeResponseDTO> employeeResponseDTOS = this.employeeService.getEmployees();
+        List<EmployeeResponseDTO> employeeResponseDTOS = this.employeeServiceImpl.getEmployees();
         return ResponseEntity.ok(employeeResponseDTOS);
     }
 
@@ -118,7 +119,7 @@ public class EmployeeController {
     public ResponseEntity<MessageResponseDTO> updateOwnProfile(
             @Parameter(description = "ID of the employee to retrieve.", example = "1")
             @PathVariable Long id, @Valid @RequestBody UpdateProfileRequestDTO updateProfileRequestDTO) {
-        this.employeeService.updateOwnProfile(id, updateProfileRequestDTO);
+        this.employeeServiceImpl.updateOwnProfile(id, updateProfileRequestDTO);
         return ResponseEntity.ok(new MessageResponseDTO("Perfil actualizado correctamente."));
     }
 
@@ -132,7 +133,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "404", description = "Employee not found.")
     })
     public ResponseEntity<MessageResponseDTO> changePassword(@PathVariable Long id, @Valid @RequestBody ChangePasswordRequestDTO changePasswordRequestDTO) {
-        this.employeeService.changePassword(id, changePasswordRequestDTO);
+        this.employeeServiceImpl.changePassword(id, changePasswordRequestDTO);
         return ResponseEntity.ok(new MessageResponseDTO("La contraseña ha sido actualizada exitosamente."));
     }
 
@@ -146,7 +147,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "404", description = "Employee not found.")
     })
     public ResponseEntity<MessageResponseDTO> resetPassword(@PathVariable Long id, @Valid @RequestBody ResetPasswordRequestDTO resetPasswordRequestDTO){
-        this.employeeService.resetPassword(id, resetPasswordRequestDTO);
+        this.employeeServiceImpl.resetPassword(id, resetPasswordRequestDTO);
         return ResponseEntity.ok(new MessageResponseDTO("La contraseña ha sido actualizada exitosamente."));
     }
 
