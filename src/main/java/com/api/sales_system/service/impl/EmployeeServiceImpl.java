@@ -2,10 +2,12 @@ package com.api.sales_system.service.impl;
 
 import com.api.sales_system.dto.*;
 import com.api.sales_system.entity.Employee;
+import com.api.sales_system.entity.Role;
 import com.api.sales_system.exception.CurrentPasswordInvalidException;
 import com.api.sales_system.exception.ResourceNotFoundException;
 import com.api.sales_system.mapper.EmployeeMapper;
 import com.api.sales_system.repository.EmployeeRepository;
+import com.api.sales_system.repository.RoleRepository;
 import com.api.sales_system.service.EmployeeService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,14 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final RoleRepository roleRepository;
     private final EmployeeMapper employeeMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, PasswordEncoder passwordEncoder){
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository, EmployeeMapper employeeMapper, PasswordEncoder passwordEncoder){
         this.employeeRepository = employeeRepository;
+        this.roleRepository = roleRepository;
         this.employeeMapper = employeeMapper;
         this.passwordEncoder = passwordEncoder;
     }
@@ -32,7 +36,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public EmployeeResponseDTO createEmployee(EmployeeCreateDTO employeeCreateDTO) {
+        Role role = this.roleRepository.findById(employeeCreateDTO.getRoleId())
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no existente."));
+
         Employee employee = this.employeeMapper.toEntity(employeeCreateDTO);
+
+        employee.setRole(role);
+
         String encodedPassword = this.passwordEncoder.encode(employee.getPassword());
 
         employee.setPassword(encodedPassword);
@@ -43,35 +53,35 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public void deleteEmployeeById(Long id) {
-        Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
-
-        if (employeeOpt.isEmpty()) throw new ResourceNotFoundException("El empleado con el id: " + id + " no fué encontrado.");
+        Employee employee = this.employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado."));
 
         this.employeeRepository.deleteById(id);
     }
 
     @Override
     public EmployeeResponseDTO getEmployeeById(Long id) {
-        Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
+        Employee employee = this.employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado."));
 
-        if (employeeOpt.isEmpty()) throw new ResourceNotFoundException("El empleado con el id: " + id + " no fué encontrado.");
-
-        return this.employeeMapper.toResponseDTO(employeeOpt.get());
+        return this.employeeMapper.toResponseDTO(employee);
     }
 
     @Override
     @Transactional
     public EmployeeResponseDTO updateEmployee(Long id, EmployeeUpdateDTO employeeUpdateDTO) {
-        Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
+        Employee employee = this.employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado."));
 
-        if (employeeOpt.isEmpty()) throw new ResourceNotFoundException("El empleado con el id: " + id + " no fué encontrado.");
+        Role role = this.roleRepository.findById(employeeUpdateDTO.getRoleId())
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no existente."));
 
-        employeeOpt.get().setFirstName(employeeUpdateDTO.getFirstName());
-        employeeOpt.get().setLastName(employeeUpdateDTO.getLastName());
-        employeeOpt.get().setRole(employeeUpdateDTO.getRole());
-        employeeOpt.get().setUserName(employeeUpdateDTO.getUserName());
+        employee.setFirstName(employeeUpdateDTO.getFirstName());
+        employee.setLastName(employeeUpdateDTO.getLastName());
+        employee.setRole(role);
+        employee.setUserName(employeeUpdateDTO.getUserName());
 
-        return this.employeeMapper.toResponseDTO(this.employeeRepository.save(employeeOpt.get()));
+        return this.employeeMapper.toResponseDTO(this.employeeRepository.save(employee));
     }
 
     @Override
@@ -86,46 +96,43 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public void updateOwnProfile(Long id, UpdateProfileRequestDTO updateProfileRequestDTO) {
-        Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
+        Employee employee = this.employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado."));
 
-        if (employeeOpt.isEmpty()) throw new ResourceNotFoundException("El empleado con el id: " + id + " no fué encontrado.");
+        employee.setFirstName(updateProfileRequestDTO.getFirstName());
+        employee.setLastName(updateProfileRequestDTO.getLastName());
+        employee.setUserName(updateProfileRequestDTO.getUserName());
 
-        employeeOpt.get().setFirstName(updateProfileRequestDTO.getFirstName());
-        employeeOpt.get().setLastName(updateProfileRequestDTO.getLastName());
-        employeeOpt.get().setUserName(updateProfileRequestDTO.getUserName());
-
-        this.employeeRepository.save(employeeOpt.get());
+        this.employeeRepository.save(employee);
     }
 
     @Override
     @Transactional
     public void changePassword(Long id, ChangePasswordRequestDTO changePasswordRequestDTO) {
-        Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
+        Employee employee = this.employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado."));
 
-        if (employeeOpt.isEmpty()) throw new ResourceNotFoundException("El empleado con el id: " + id + " no fué encontrado.");
-
-        boolean match = this.passwordEncoder.matches(changePasswordRequestDTO.getCurrentPassword(), employeeOpt.get().getPassword());
+        boolean match = this.passwordEncoder.matches(changePasswordRequestDTO.getCurrentPassword(), employee.getPassword());
 
         if (!match) throw new CurrentPasswordInvalidException("Contraseña actual incorrecta.");
 
         String newEncodedPassword = this.passwordEncoder.encode(changePasswordRequestDTO.getNewPassword());
 
-        employeeOpt.get().setPassword(newEncodedPassword);
+        employee.setPassword(newEncodedPassword);
 
-        this.employeeRepository.save(employeeOpt.get());
+        this.employeeRepository.save(employee);
     }
 
     @Override
     @Transactional
     public void resetPassword(Long id, ResetPasswordRequestDTO resetPasswordRequestDTO) {
-        Optional<Employee> employeeOpt = this.employeeRepository.findById(id);
-
-        if (employeeOpt.isEmpty()) throw new ResourceNotFoundException("El empleado con el id: " + id + " no fué encontrado.");
+        Employee employee = this.employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado."));
 
         String encodedPassword = this.passwordEncoder.encode(resetPasswordRequestDTO.getNewPassword());
 
-        employeeOpt.get().setPassword(encodedPassword);
+        employee.setPassword(encodedPassword);
 
-        this.employeeRepository.save(employeeOpt.get());
+        this.employeeRepository.save(employee);
     }
 }

@@ -2,6 +2,7 @@ package com.api.sales_system.dto;
 
 import com.api.sales_system.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,8 @@ public class EmployeeCreateDTO {
             example = "CASHIER"
     )
     @NotNull(message = "El rol es obligatorio.")
-    private Role role;
+    @Min(value = 0, message = "El ID del role no puede ser negativo.")
+    private Long roleId;
 
     @Schema(description = "Unique username used for login.", example = "laura.morales")
     @NotBlank(message = "El nombre de usuario es obligatorio.")
@@ -36,4 +38,5 @@ public class EmployeeCreateDTO {
     @Schema(description = "Password for the employee account.", example = "securePass123")
     @NotBlank(message = "La contraseña es obligatoria.")
     private String password;
+
 }

@@ -38,8 +38,8 @@ public class EmployeeController {
             @ApiResponse(responseCode = "400", description = "Validation error - invalid input data."),
             @ApiResponse(responseCode = "409", description = "Conflict - username already exists.")
     })
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeCreateDTO employeeRequestDTO) {
-        EmployeeResponseDTO employeeResponseDTO = this.employeeServiceImpl.createEmployee(employeeRequestDTO);
+    public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeCreateDTO employeeCreateDTO) {
+        EmployeeResponseDTO employeeResponseDTO = this.employeeServiceImpl.createEmployee(employeeCreateDTO);
         URI location = URI.create("/api/v2/employees/" + employeeResponseDTO.getId());
         return ResponseEntity.created(location).body(employeeResponseDTO);
     }

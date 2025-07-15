@@ -42,7 +42,7 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorMessage> handleDataIntegrityViolationException(){
-        ErrorMessage errorMessage = new ErrorMessage("El número de celular, correo electrónico o nombre de usuario ya existen en el sistéma.");
+        ErrorMessage errorMessage = new ErrorMessage("Datos de entrada incorrectos.");
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
