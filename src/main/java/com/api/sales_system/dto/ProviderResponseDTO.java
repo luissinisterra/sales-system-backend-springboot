@@ -28,6 +28,6 @@ public class ProviderResponseDTO {
 
     private String country;
 
-    private List<ProviderProduct> providerProducts;
+    /*private List<ProviderProduct> providerProducts;*/
 
 }

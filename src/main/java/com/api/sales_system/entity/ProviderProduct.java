@@ -5,14 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+/*@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "provider_products")
+@Table(name = "provider_products")*/
 public class ProviderProduct {
 
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,6 +28,6 @@ public class ProviderProduct {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "provider_id", nullable = false)
-    private Provider provider;
+    private Provider provider;*/
 
 }

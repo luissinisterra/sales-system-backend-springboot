@@ -45,7 +45,7 @@ public class ClientServiceImplTest {
         var response = clientService.createClient(clientRequestDTO);
 
         // Then
-        assertEquals(1234567890L, response.getId());
+        assertEquals("1234567890", response.getId());
         assertEquals("John", response.getFirstName());
         assertEquals("Doe", response.getLastName());
         assertEquals("3001234567", response.getPhoneNumber());

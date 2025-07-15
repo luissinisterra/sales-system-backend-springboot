@@ -37,7 +37,7 @@ public class ProviderUpdateDTO {
     @NotBlank(message = "El país es obligatorio.")
     private String country;
 
-    @NotNull(message = "La lista de productos del proveedor no puede estar vacía.")
-    private List<ProviderProduct> providerProducts;
+    /*@NotNull(message = "La lista de productos del proveedor no puede estar vacía.")
+    private List<ProviderProduct> providerProducts;*/
 
 }
