@@ -33,7 +33,7 @@ public class PurchaseDetail {
     private BigDecimal unitPrice;
 
     @Column(name = "sub_total", nullable = false)
-    private BigDecimal subtotal;
+    private BigDecimal subTotal;
 
 }
 

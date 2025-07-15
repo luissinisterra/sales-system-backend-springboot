@@ -1,6 +1,6 @@
 package com.api.sales_system.dto;
 
-import com.api.sales_system.enums.Role;
+import com.api.sales_system.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,8 +24,7 @@ public class EmployeeUpdateDTO {
 
     @Schema(
             description = "Role of the employee. Can be ADMINISTRATOR or CASHIER.",
-            example = "CASHIER",
-            implementation = Role.class
+            example = "CASHIER"
     )
     @NotNull(message = "El rol es obligatorio.")
     private Role role;
