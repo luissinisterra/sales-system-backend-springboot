@@ -31,24 +31,24 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional
     public ClientResponseDTO createClient(ClientCreateDTO clientCreateDTO) {
-        Optional<Client> clientOpt = this.clientRepository.findById(clientCreateDTO.getId());
+        boolean exists = clientRepository.existsById(clientCreateDTO.getId());
+        if (exists) {
+            throw new ResourceAlreadyExistsException("Cliente con el id: " + clientCreateDTO.getId() + " ya existe en el sistema.");
+        }
 
-        if(clientOpt.isPresent()) throw new ResourceAlreadyExistsException("El cliente con el id: " + clientOpt.get().getId() + " ya exíste en el sistéma.");
-
-        Client client = this.clientMapper.toEntity(clientCreateDTO);
-
-        return this.clientMapper.toResponseDTO(this.clientRepository.save(client));
+        Client client = clientMapper.toEntity(clientCreateDTO);
+        return clientMapper.toResponseDTO(clientRepository.save(client));
     }
 
     @Override
     @Transactional
     public void deleteClientById(String id) {
-        Optional<Client> clientOpt = this.clientRepository.findById(id);
+        Client client = this.clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("El cliente con el id: " + id + " no fue encontrado."));
 
-        if(clientOpt.isEmpty()) throw new ResourceNotFoundException("El cliente con el id: " + id + " no fué encontrado.");
-
-        this.clientRepository.deleteById(id);
+        this.clientRepository.delete(client);
     }
+
 
     @Override
     public ClientResponseDTO getClientById(String id) {

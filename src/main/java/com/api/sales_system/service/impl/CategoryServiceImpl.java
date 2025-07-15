@@ -31,6 +31,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryResponseDTO createCategory(CategoryCreateDTO categoryCreateDTO) {
+        Optional<Category> categoryOpt = this.categoryRepository.findByName(categoryCreateDTO.getName());
+
+        if (categoryOpt.isPresent()) throw  new ResourceAlreadyExistsException("Categoria con el nombre " + categoryCreateDTO.getName() + " ya existe en el sistema.");
+
         Category category = this.categoryMapper.toEntity(categoryCreateDTO);
 
         return this.categoryMapper.toResponseDTO(this.categoryRepository.save(category));
@@ -39,42 +43,26 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void deleteCategoryById(Long id) {
-        Optional<Category> categoryOpt = this.categoryRepository.findById(id);
-
-        if (categoryOpt.isEmpty()) {
-            throw new ResourceNotFoundException("La categoría con el id: " + id + " no fue encontrada.");
-        }
+        Category category = this.categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria no encontrada."));
 
         this.categoryRepository.deleteById(id);
     }
 
     @Override
     public CategoryResponseDTO getCategoryById(Long id) {
-        Optional<Category> categoryOpt = this.categoryRepository.findById(id);
+        Category category = this.categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria no encontrada."));
 
-        if (categoryOpt.isEmpty()) {
-            throw new ResourceNotFoundException("La categoría con el id: " + id + " no fue encontrada.");
-        }
-
-        return this.categoryMapper.toResponseDTO(categoryOpt.get());
+        return this.categoryMapper.toResponseDTO(category);
     }
 
     @Override
     @Transactional
     public CategoryResponseDTO updateCategory(Long id, CategoryUpdateDTO categoryUpdateDTO) {
-        Optional<Category> categoryOpt = this.categoryRepository.findById(id);
+        Optional<Category> categoryOpt = this.categoryRepository.findByName(categoryUpdateDTO.getName());
 
-        if (categoryOpt.isEmpty()) {
-            throw new ResourceNotFoundException("La categoría con el id: " + id + " no fue encontrada.");
-        }
-
-        // Verificar que el nombre no esté en uso por otra categoría
-        if (!categoryOpt.get().getName().equals(categoryUpdateDTO.getName())) {
-            Optional<Category> existingCategory = this.categoryRepository.findByName(categoryUpdateDTO.getName());
-            if (existingCategory.isPresent()) {
-                throw new ResourceAlreadyExistsException("La categoría con el nombre: " + categoryUpdateDTO.getName() + " ya existe en el sistema.");
-            }
-        }
+        if (categoryOpt.isPresent()) throw  new ResourceAlreadyExistsException("Categoria con el nombre " + categoryUpdateDTO.getName() + " ya existe en el sistema.");
 
         categoryOpt.get().setName(categoryUpdateDTO.getName());
         categoryOpt.get().setDescription(categoryUpdateDTO.getDescription());
