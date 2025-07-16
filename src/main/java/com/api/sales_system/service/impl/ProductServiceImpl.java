@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -39,33 +38,26 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void deleteProductById(Long id) {
-        Optional<Product> productOpt = this.productRepository.findById(id);
+        Product product = this.productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("El producto con el id: " + id + " no fué encontrado."));
 
-        if (productOpt.isEmpty())
-            throw new ResourceNotFoundException("El producto con el id: " + id + " no fué encontrado.");
-
-        this.productRepository.deleteById(id);
+        this.productRepository.delete(product);
     }
 
     @Override
     public ProductResponseDTO getProductById(Long id) {
-        Optional<Product> productOpt = this.productRepository.findById(id);
+        Product product = this.productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("El producto con el id: " + id + " no fué encontrado."));
 
-        if (productOpt.isEmpty())
-            throw new ResourceNotFoundException("El producto con el id: " + id + " no fué encontrado.");
-
-        return this.productMapper.toResponseDTO(productOpt.get());
+        return this.productMapper.toResponseDTO(product);
     }
 
     @Override
     @Transactional
     public ProductResponseDTO updateProduct(Long id, ProductUpdateDTO productUpdateDTO) {
-        Optional<Product> productOpt = this.productRepository.findById(id);
+        Product product = this.productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("El producto con el id: " + id + " no fué encontrado."));;
 
-        if (productOpt.isEmpty())
-            throw new ResourceNotFoundException("El producto con el id: " + id + " no fué encontrado.");
-
-        Product product = productOpt.get();
         product.setName(productUpdateDTO.getName());
         product.setPrice(productUpdateDTO.getPrice());
         product.setCategory(productUpdateDTO.getCategory());
