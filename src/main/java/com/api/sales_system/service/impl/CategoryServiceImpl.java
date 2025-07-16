@@ -31,12 +31,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryResponseDTO createCategory(CategoryCreateDTO categoryCreateDTO) {
-        Optional<Category> categoryOpt = this.categoryRepository.findByName(categoryCreateDTO.getName());
-
-        if (categoryOpt.isPresent()) throw  new ResourceAlreadyExistsException("Categoria con el nombre " + categoryCreateDTO.getName() + " ya existe en el sistema.");
+        boolean exists = this.categoryRepository.existsByName(categoryCreateDTO.getName());
+        if (exists) {
+            throw  new ResourceAlreadyExistsException("Categoria con el nombre " + categoryCreateDTO.getName() + " ya existe en el sistema.");
+        }
 
         Category category = this.categoryMapper.toEntity(categoryCreateDTO);
-
         return this.categoryMapper.toResponseDTO(this.categoryRepository.save(category));
     }
 
@@ -46,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = this.categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Categoria no encontrada."));
 
-        this.categoryRepository.deleteById(id);
+        this.categoryRepository.delete(category);
     }
 
     @Override
@@ -60,15 +60,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryResponseDTO updateCategory(Long id, CategoryUpdateDTO categoryUpdateDTO) {
-        Optional<Category> categoryOpt = this.categoryRepository.findByName(categoryUpdateDTO.getName());
+        Category category = this.categoryRepository.findByName(categoryUpdateDTO.getName())
+                .orElseThrow(() -> new ResourceAlreadyExistsException("Categoria con el nombre " + categoryUpdateDTO.getName() + " ya existe en el sistema."));
 
-        if (categoryOpt.isPresent()) throw  new ResourceAlreadyExistsException("Categoria con el nombre " + categoryUpdateDTO.getName() + " ya existe en el sistema.");
+        category.setName(categoryUpdateDTO.getName());
+        category.setDescription(categoryUpdateDTO.getDescription());
+        category.setActive(categoryUpdateDTO.isActive());
 
-        categoryOpt.get().setName(categoryUpdateDTO.getName());
-        categoryOpt.get().setDescription(categoryUpdateDTO.getDescription());
-        categoryOpt.get().setActive(categoryUpdateDTO.isActive());
-
-        return this.categoryMapper.toResponseDTO(this.categoryRepository.save(categoryOpt.get()));
+        return this.categoryMapper.toResponseDTO(this.categoryRepository.save(category));
     }
 
     @Override
