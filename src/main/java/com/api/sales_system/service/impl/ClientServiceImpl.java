@@ -33,7 +33,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientResponseDTO createClient(ClientCreateDTO clientCreateDTO) {
         boolean exists = clientRepository.existsById(clientCreateDTO.getId());
         if (exists) {
-            throw new ResourceAlreadyExistsException("Cliente con el id: " + clientCreateDTO.getId() + " ya existe en el sistema.");
+            throw new ResourceAlreadyExistsException("Cliente con el id " + clientCreateDTO.getId() + " ya existe en el sistema.");
         }
 
         Client client = clientMapper.toEntity(clientCreateDTO);
@@ -44,7 +44,7 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     public void deleteClientById(String id) {
         Client client = this.clientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("El cliente con el id: " + id + " no fue encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente con el id " + id + " no fue encontrado."));
 
         this.clientRepository.delete(client);
     }
@@ -52,27 +52,25 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDTO getClientById(String id) {
-        Optional<Client> clientOpt = this.clientRepository.findById(id);
+        Client client = this.clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente con el id " + id + " no fue encontrado."));
 
-        if (clientOpt.isEmpty()) throw new ResourceNotFoundException("El cliente con el id: " + id + " no fué encontrado.");
-
-        return this.clientMapper.toResponseDTO(clientOpt.get());
+        return this.clientMapper.toResponseDTO(client);
     }
 
     @Override
     @Transactional
     public ClientResponseDTO updateClient(String id, ClientUpdateDTO clientUpdateDTO){
-        Optional<Client> clientOpt = this.clientRepository.findById(id);
+        Client client = this.clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente con el id " + id + " no fue encontrado."));
 
-        if (clientOpt.isEmpty()) throw new ResourceNotFoundException("El cliente con el id: " + id + " no fué encontrado.");
+        client.setFirstName(clientUpdateDTO.getFirstName());
+        client.setLastName(clientUpdateDTO.getLastName());
+        client.setPhoneNumber(clientUpdateDTO.getPhoneNumber());
+        client.setEmail(clientUpdateDTO.getEmail());
+        client.setAge(clientUpdateDTO.getAge());
 
-        clientOpt.get().setFirstName(clientUpdateDTO.getFirstName());
-        clientOpt.get().setLastName(clientUpdateDTO.getLastName());
-        clientOpt.get().setPhoneNumber(clientUpdateDTO.getPhoneNumber());
-        clientOpt.get().setEmail(clientUpdateDTO.getEmail());
-        clientOpt.get().setAge(clientUpdateDTO.getAge());
-
-        return this.clientMapper.toResponseDTO(this.clientRepository.save(clientOpt.get()));
+        return this.clientMapper.toResponseDTO(this.clientRepository.save(client));
     }
 
     @Override
