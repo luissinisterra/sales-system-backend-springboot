@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -18,7 +17,7 @@ import java.util.List;
 public class SaleCreateDTO {
 
     @NotNull(message = "El ID del cliente es obligatorio.")
-    private Long clientId;
+    private String clientId;
 
     @NotNull(message = "El ID del empleado es obligatorio.")
     private Long employeeId;

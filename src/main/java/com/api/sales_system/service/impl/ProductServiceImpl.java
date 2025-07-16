@@ -3,10 +3,14 @@ package com.api.sales_system.service.impl;
 import com.api.sales_system.dto.ProductCreateDTO;
 import com.api.sales_system.dto.ProductResponseDTO;
 import com.api.sales_system.dto.ProductUpdateDTO;
+import com.api.sales_system.entity.Category;
 import com.api.sales_system.entity.Product;
+import com.api.sales_system.entity.Provider;
 import com.api.sales_system.exception.ResourceNotFoundException;
 import com.api.sales_system.mapper.ProductMapper;
+import com.api.sales_system.repository.CategoryRepository;
 import com.api.sales_system.repository.ProductRepository;
+import com.api.sales_system.repository.ProviderRepository;
 import com.api.sales_system.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +23,31 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final ProviderRepository providerRepository;
     private final ProductMapper productMapper;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ProviderRepository providerRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        this.providerRepository = providerRepository;
         this.productMapper = productMapper;
     }
 
     @Override
     @Transactional
     public ProductResponseDTO createProduct(ProductCreateDTO productCreateDTO) {
+        Category category = this.categoryRepository.findById(productCreateDTO.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria no encontrada."));
+
+        Provider provider = this.providerRepository.findById(productCreateDTO.getProviderId())
+                .orElseThrow(() -> new ResourceNotFoundException("Provider no encontrado."));
+
         Product product = this.productMapper.toEntity(productCreateDTO);
+
+        product.setCategory(category);
+        product.setProvider(provider);
 
         return this.productMapper.toResponseDTO(this.productRepository.save(product));
     }
@@ -39,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void deleteProductById(Long id) {
         Product product = this.productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("El producto con el id: " + id + " no fué encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado."));
 
         this.productRepository.delete(product);
     }
@@ -47,7 +64,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDTO getProductById(Long id) {
         Product product = this.productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("El producto con el id: " + id + " no fué encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado."));
+
 
         return this.productMapper.toResponseDTO(product);
     }
@@ -56,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductResponseDTO updateProduct(Long id, ProductUpdateDTO productUpdateDTO) {
         Product product = this.productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("El producto con el id: " + id + " no fué encontrado."));;
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado."));
 
         product.setName(productUpdateDTO.getName());
         product.setPrice(productUpdateDTO.getPrice());

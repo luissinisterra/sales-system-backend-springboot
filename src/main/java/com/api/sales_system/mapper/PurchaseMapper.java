@@ -10,6 +10,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PurchaseMapper {
     Purchase toEntity(PurchaseCreateDTO purchaseCreateDTO);
+
     PurchaseResponseDTO toResponseDTO(Purchase purchase);
+
     List<PurchaseResponseDTO> toResponseList(List<Purchase> purchases);
 }

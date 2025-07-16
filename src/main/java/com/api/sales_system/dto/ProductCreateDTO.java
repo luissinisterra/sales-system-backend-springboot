@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,14 +23,21 @@ public class ProductCreateDTO {
 
     @Schema(description = "Unit price of the product. Must be zero or greater.", example = "12900.50")
     @Min(value = 0, message = "El precio no puede ser un número negativo.")
-    private double price;
+    private BigDecimal price;
 
     @Schema(
             description = "Product category. Must match one of the allowed enum values.",
             example = "BEVERAGE"
     )
-    @NotNull(message = "La categoría es obligatoria.")
-    private Category category;
+    @NotNull(message = "El ID de la categoría es obligatoria.")
+    private Long categoryId;
+
+    @Schema(
+            description = "Product provider ID. Must match one of the allowed role values.",
+            example = "1"
+    )
+    @NotNull(message = "El ID del proveedor es obligatorio.")
+    private Long providerId;
 
     @Schema(description = "Available stock of the product.", example = "150")
     @Min(value = 0, message = "Las existencias no pueden ser negativas.")
