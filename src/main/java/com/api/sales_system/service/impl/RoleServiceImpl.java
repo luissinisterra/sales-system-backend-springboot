@@ -31,40 +31,41 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public RoleResponseDTO createRole(RoleCreateDTO roleCreateDTO) {
-        Role role = this.roleMapper.toEntity(roleCreateDTO);
+        boolean exists = this.roleRepository.existsByName(roleCreateDTO.getName());
+        if (exists) {
+            throw new ResourceNotFoundException("Role con nombre " + roleCreateDTO.getName() + " ya existe en el sistema.");
+        }
 
+        Role role = this.roleMapper.toEntity(roleCreateDTO);
         return this.roleMapper.toResponseDTO(this.roleRepository.save(role));
     }
 
     @Override
     @Transactional
     public void deleteRoleById(Long id) {
-        Optional<Role> roleOpt = this.roleRepository.findById(id);
+        Role role = this.roleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado."));
 
-        if(roleOpt.isEmpty()) throw new ResourceNotFoundException("El rol con el id: " + id + " no fué encontrado.");
-
-        this.roleRepository.deleteById(id);
+        this.roleRepository.delete(role);
     }
 
     @Override
     public RoleResponseDTO getRoleById(Long id) {
-        Optional<Role> roleOpt = this.roleRepository.findById(id);
+        Role role = this.roleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado."));
 
-        if (roleOpt.isEmpty()) throw new ResourceNotFoundException("El rol con el id: " + id + " no fué encontrado.");
-
-        return this.roleMapper.toResponseDTO(roleOpt.get());
+        return this.roleMapper.toResponseDTO(role);
     }
 
     @Override
     @Transactional
     public RoleResponseDTO updateRole(Long id, RoleUpdateDTO roleUpdateDTO){
-        Optional<Role> roleOpt = this.roleRepository.findById(id);
+        Role role = this.roleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado."));
 
-        if (roleOpt.isEmpty()) throw new ResourceNotFoundException("El rol con el id: " + id + " no fué encontrado.");
+        role.setName(roleUpdateDTO.getName());
 
-        roleOpt.get().setName(roleUpdateDTO.getName());
-
-        return this.roleMapper.toResponseDTO(this.roleRepository.save(roleOpt.get()));
+        return this.roleMapper.toResponseDTO(this.roleRepository.save(role));
     }
 
     @Override
