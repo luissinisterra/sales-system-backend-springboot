@@ -33,8 +33,8 @@ public class Sale {
     @Column(name = "date_sale", nullable = false)
     private LocalDateTime dateSale;
 
-    @Column(name = "total_price", nullable = false)
-    private double totalPrice;
+    @Column(name = "total_amount", nullable = false)
+    private double totalAmount;
 
     @CreationTimestamp
     @Column(name = "created_at")

@@ -1,6 +1,7 @@
 package com.api.sales_system.dto;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -21,8 +22,8 @@ public class PurchaseCreateDTO {
     @NotNull(message = "El ID del empleado es obligatorio.")
     private Long employeeId;
 
-    // Se calculará automáticamente en el backend
-    private String purchaseDate; // ISO-8601 format (opcional si backend la genera)
+    @NotBlank(message = "La fecha de la compra es obligatoria.")
+    private String purchaseDate;
 
     @NotNull(message = "El precio total de la compra es obligatorio.")
     @Min(value = 0, message = "El precio total de la compra no puede ser negativa.")
