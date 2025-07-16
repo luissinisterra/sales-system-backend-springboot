@@ -56,7 +56,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = this.employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado."));
 
-        this.employeeRepository.deleteById(id);
+        this.employeeRepository.delete(employee);
     }
 
     @Override
