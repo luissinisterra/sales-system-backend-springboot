@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
@@ -42,37 +41,34 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     @Transactional
     public PurchaseResponseDTO createPurchase(PurchaseCreateDTO purchaseCreateDTO) {
-        Provider provider = providerRepository.findById(purchaseCreateDTO.getProviderId())
+        Provider provider = this.providerRepository.findById(purchaseCreateDTO.getProviderId())
                 .orElseThrow(() -> new ResourceNotFoundException("Proveedor con ID " + purchaseCreateDTO.getProviderId() + " no encontrado."));
 
-        Employee employee = employeeRepository.findById(purchaseCreateDTO.getEmployeeId())
+        Employee employee = this.employeeRepository.findById(purchaseCreateDTO.getEmployeeId())
                 .orElseThrow(() -> new ResourceNotFoundException("Empleado con ID " + purchaseCreateDTO.getEmployeeId() + " no encontrado."));
 
-        Purchase purchase = purchaseMapper.toEntity(purchaseCreateDTO);
+        Purchase purchase = this.purchaseMapper.toEntity(purchaseCreateDTO);
         purchase.setProvider(provider);
         purchase.setEmployee(employee);
 
-        return purchaseMapper.toResponseDTO(purchaseRepository.save(purchase));
+        return this.purchaseMapper.toResponseDTO(this.purchaseRepository.save(purchase));
     }
 
     @Override
     @Transactional
     public void deletePurchaseById(Long id) {
-        Optional<Purchase> purchaseOpt = purchaseRepository.findById(id);
+        Purchase purchase = this.purchaseRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("La compra con ID " + id + " no fue encontrada."));
 
-        if (purchaseOpt.isEmpty()) {
-            throw new ResourceNotFoundException("La compra con ID " + id + " no fue encontrada.");
-        }
-
-        purchaseRepository.deleteById(id);
+        this.purchaseRepository.delete(purchase);
     }
 
     @Override
     public PurchaseResponseDTO getPurchaseById(Long id) {
-        Purchase purchase = purchaseRepository.findById(id)
+        Purchase purchase = this.purchaseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("La compra con ID " + id + " no fue encontrada."));
 
-        return purchaseMapper.toResponseDTO(purchase);
+        return this.purchaseMapper.toResponseDTO(purchase);
     }
 
     /*@Override
@@ -99,10 +95,10 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public List<PurchaseResponseDTO> getPurchases() {
-        List<Purchase> purchases = purchaseRepository.findAll();
+        List<Purchase> purchases = this.purchaseRepository.findAll();
 
         if (purchases.isEmpty()) return List.of();
 
-        return purchaseMapper.toResponseList(purchases);
+        return this.purchaseMapper.toResponseList(purchases);
     }
 }
