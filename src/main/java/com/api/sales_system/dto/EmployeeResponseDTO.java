@@ -28,7 +28,7 @@ public class EmployeeResponseDTO {
             description = "Role assigned to the employee.",
             example = "ADMINISTRATOR"
     )
-    private Role role;
+    private RoleResponseDTO role;
 
     @Schema(description = "Username used by the employee to log in.", example = "laura.morales")
     private String userName;

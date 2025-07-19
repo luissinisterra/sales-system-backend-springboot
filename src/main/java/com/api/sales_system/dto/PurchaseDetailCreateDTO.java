@@ -17,7 +17,7 @@ public class PurchaseDetailCreateDTO {
 
     @Schema(description = "Product name.", example = "Café Colombiano")
     @NotBlank(message = "El nombre es obligatorio.")
-    private String name;
+    private String productName;
 
     @Schema(description = "Unit price of the product. Must be zero or greater.", example = "12900.50")
     @Min(value = 0, message = "El precio no puede ser un número negativo.")
@@ -32,10 +32,6 @@ public class PurchaseDetailCreateDTO {
 
     @Min(value = 1, message = "La cantidad debe ser mayor que cero.")
     private int quantity;
-
-    @NotNull(message = "El precio unitario de la compra es obligatorio.")
-    @Min(value = 0, message = "El precio unitario de la compra no puede ser negativo.")
-    private BigDecimal unitPrice;
 
     @NotNull(message = "El precio total unitario de la compra es obligatorio.")
     @Min(value = 0, message = "El precio total unitario de la compra no puede ser negativo.")

@@ -20,11 +20,11 @@ public class PurchaseDetailResponseDTO {
 
     private String productName;
 
+    private BigDecimal price;
+
     private CategoryResponseDTO category;
 
     private int quantity;
-
-    private BigDecimal unitPrice;
 
     private BigDecimal subTotal;
 

@@ -30,7 +30,7 @@ public class PurchaseDetail {
     private Purchase purchase;
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private String productName;
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
@@ -41,9 +41,6 @@ public class PurchaseDetail {
 
     @Column(nullable = false)
     private int quantity;
-
-    @Column(name = "unit_price", nullable = false)
-    private BigDecimal unitPrice;
 
     @Column(name = "sub_total", nullable = false)
     private BigDecimal subTotal;
