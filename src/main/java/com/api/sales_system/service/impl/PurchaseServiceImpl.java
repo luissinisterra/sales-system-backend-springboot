@@ -1,10 +1,11 @@
 package com.api.sales_system.service.impl;
 
-import com.api.sales_system.dto.PurchaseCreateDTO;
-import com.api.sales_system.dto.PurchaseDetailCreateDTO;
-import com.api.sales_system.dto.PurchaseResponseDTO;
+import com.api.sales_system.dto.*;
 import com.api.sales_system.entity.*;
 import com.api.sales_system.exception.ResourceNotFoundException;
+import com.api.sales_system.mapper.CategoryMapper;
+import com.api.sales_system.mapper.EmployeeMapper;
+import com.api.sales_system.mapper.ProviderMapper;
 import com.api.sales_system.mapper.PurchaseMapper;
 import com.api.sales_system.repository.CategoryRepository;
 import com.api.sales_system.repository.EmployeeRepository;
@@ -25,6 +26,9 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final EmployeeRepository employeeRepository;
     private final CategoryRepository categoryRepository;
     private final PurchaseMapper purchaseMapper;
+    private final ProviderMapper providerMapper;
+    private final EmployeeMapper employeeMapper;
+    private final CategoryMapper categoryMapper;
 
     @Autowired
     public PurchaseServiceImpl(
@@ -32,13 +36,19 @@ public class PurchaseServiceImpl implements PurchaseService {
             ProviderRepository providerRepository,
             EmployeeRepository employeeRepository,
             CategoryRepository categoryRepository,
-            PurchaseMapper purchaseMapper
+            PurchaseMapper purchaseMapper,
+            ProviderMapper providerMapper,
+            EmployeeMapper employeeMapper,
+            CategoryMapper categoryMapper
     ) {
         this.purchaseRepository = purchaseRepository;
         this.providerRepository = providerRepository;
         this.employeeRepository = employeeRepository;
         this.categoryRepository = categoryRepository;
         this.purchaseMapper = purchaseMapper;
+        this.providerMapper = providerMapper;
+        this.employeeMapper = employeeMapper;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
@@ -75,7 +85,19 @@ public class PurchaseServiceImpl implements PurchaseService {
             purchaseDetails.get(finalI).setCategory(category);
         }*/
 
-        return this.purchaseMapper.toResponseDTO(this.purchaseRepository.save(purchase));
+        PurchaseResponseDTO purchaseResponseDTO = this.purchaseMapper.toResponseDTO(this.purchaseRepository.save(purchase));
+
+        ProviderResponseDTO providerResponseDTO = this.providerMapper.toResponseDTO(provider);
+        purchaseResponseDTO.setProvider(providerResponseDTO);
+
+        EmployeeResponseDTO employeeResponseDTO =  this.employeeMapper.toResponseDTO(employee);
+        purchaseResponseDTO.setEmployee(employeeResponseDTO);
+
+        CategoryResponseDTO categoryResponseDTO = this.categoryMapper.toResponseDTO(category);
+
+        purchaseResponseDTO.getPurchaseDetails().get(0).setCategory(categoryResponseDTO);
+
+        return purchaseResponseDTO;
     }
 
     @Override

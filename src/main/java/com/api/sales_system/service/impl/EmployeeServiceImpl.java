@@ -47,6 +47,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employee.setPassword(encodedPassword);
 
+        /*EmployeeResponseDTO employeeResponseDTO = this.employeeMapper.toResponseDTO(this.employeeRepository.save(employee));
+        employeeResponseDTO.setRole(role.getName());*/
+
         return this.employeeMapper.toResponseDTO(this.employeeRepository.save(employee));
     }
 

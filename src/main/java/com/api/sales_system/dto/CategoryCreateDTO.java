@@ -13,7 +13,4 @@ public class CategoryCreateDTO {
     @NotBlank(message = "El nombre es obligatorio.")
     private String name;
 
-    @NotBlank(message = "La descripción es obligatoria.")
-    private String description;
-
 }

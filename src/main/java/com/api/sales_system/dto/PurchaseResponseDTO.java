@@ -1,5 +1,7 @@
 package com.api.sales_system.dto;
 
+import com.api.sales_system.entity.Employee;
+import com.api.sales_system.entity.Provider;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,14 +21,14 @@ public class PurchaseResponseDTO {
 
     private Long id;
 
-    private Long providerId;
+    private ProviderResponseDTO provider;
 
-    private Long employeeId;
+    private EmployeeResponseDTO employee;
 
     private String purchaseDate;
 
     private BigDecimal totalAmount;
 
-    private List<PurchaseDetailCreateDTO> purchaseDetails;
+    private List<PurchaseDetailResponseDTO> purchaseDetails;
 
 }

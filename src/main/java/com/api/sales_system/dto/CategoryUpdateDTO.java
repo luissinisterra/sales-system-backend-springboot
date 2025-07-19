@@ -13,9 +13,6 @@ public class CategoryUpdateDTO {
     @NotBlank(message = "El nombre es obligatorio.")
     private String name;
 
-    @NotBlank(message = "La descripción es obligatoria.")
-    private String description;
-
     private boolean active;
 
 }
