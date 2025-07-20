@@ -15,6 +15,4 @@ public class CategoryResponseDTO {
 
     private String name;
 
-    private Boolean active = true;
-
 }

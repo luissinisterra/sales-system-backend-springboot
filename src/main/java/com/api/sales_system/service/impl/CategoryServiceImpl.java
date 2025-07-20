@@ -67,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         return this.categoryMapper.toResponseDTO(this.categoryRepository.save(category));
     }
-
+    
     @Override
     public List<CategoryResponseDTO> getCategories() {
         List<Category> categories = this.categoryRepository.findAll();

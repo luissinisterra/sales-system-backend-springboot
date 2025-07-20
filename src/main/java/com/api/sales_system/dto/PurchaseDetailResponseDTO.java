@@ -1,7 +1,6 @@
 package com.api.sales_system.dto;
 
-import com.api.sales_system.entity.Category;
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.api.sales_system.entity.Product;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,9 +17,7 @@ public class PurchaseDetailResponseDTO {
 
     private Long id;
 
-    private String productName;
-
-    private BigDecimal price;
+    private ProductResponseDTO product;
 
     private CategoryResponseDTO category;
 

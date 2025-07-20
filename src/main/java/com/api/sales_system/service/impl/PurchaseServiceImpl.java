@@ -3,12 +3,12 @@ package com.api.sales_system.service.impl;
 import com.api.sales_system.dto.*;
 import com.api.sales_system.entity.*;
 import com.api.sales_system.exception.ResourceNotFoundException;
-import com.api.sales_system.mapper.CategoryMapper;
 import com.api.sales_system.mapper.EmployeeMapper;
+import com.api.sales_system.mapper.ProductMapper;
 import com.api.sales_system.mapper.ProviderMapper;
 import com.api.sales_system.mapper.PurchaseMapper;
-import com.api.sales_system.repository.CategoryRepository;
 import com.api.sales_system.repository.EmployeeRepository;
+import com.api.sales_system.repository.ProductRepository;
 import com.api.sales_system.repository.ProviderRepository;
 import com.api.sales_system.repository.PurchaseRepository;
 import com.api.sales_system.service.PurchaseService;
@@ -24,65 +24,55 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final ProviderRepository providerRepository;
     private final EmployeeRepository employeeRepository;
-    private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
     private final PurchaseMapper purchaseMapper;
     private final ProviderMapper providerMapper;
     private final EmployeeMapper employeeMapper;
-    private final CategoryMapper categoryMapper;
+    private final ProductMapper productMapper;
 
     @Autowired
     public PurchaseServiceImpl(
             PurchaseRepository purchaseRepository,
             ProviderRepository providerRepository,
             EmployeeRepository employeeRepository,
-            CategoryRepository categoryRepository,
+            ProductRepository productRepository,
             PurchaseMapper purchaseMapper,
             ProviderMapper providerMapper,
             EmployeeMapper employeeMapper,
-            CategoryMapper categoryMapper
+            ProductMapper productMapper
     ) {
         this.purchaseRepository = purchaseRepository;
         this.providerRepository = providerRepository;
         this.employeeRepository = employeeRepository;
-        this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
         this.purchaseMapper = purchaseMapper;
         this.providerMapper = providerMapper;
         this.employeeMapper = employeeMapper;
-        this.categoryMapper = categoryMapper;
+        this.productMapper = productMapper;
     }
 
     @Override
     @Transactional
     public PurchaseResponseDTO createPurchase(PurchaseCreateDTO purchaseCreateDTO) {
-        Provider provider = this.providerRepository.findById(purchaseCreateDTO.getProviderId())
+        Provider provider = providerRepository.findById(purchaseCreateDTO.getProviderId())
                 .orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado."));
 
-        Employee employee = this.employeeRepository.findById(purchaseCreateDTO.getEmployeeId())
+        Employee employee = employeeRepository.findById(purchaseCreateDTO.getEmployeeId())
                 .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado."));
 
-        Purchase purchase = this.purchaseMapper.toEntity(purchaseCreateDTO);
+        Purchase purchase = purchaseMapper.toEntity(purchaseCreateDTO);
         purchase.setProvider(provider);
         purchase.setEmployee(employee);
 
-        /*Category category = this.categoryRepository.findById(1L).
-                orElseThrow(() -> new ResourceNotFoundException("Categoria del producto no encontrada."));
+        for (int i = 0; i < purchase.getPurchaseDetails().size(); i++) {
+            PurchaseDetail detail = purchase.getPurchaseDetails().get(i);
+            Long productId = purchaseCreateDTO.getPurchaseDetails().get(i).getProductId();
 
-        purchase.getPurchaseDetails().get(0).setPurchase(purchase);
-        purchase.getPurchaseDetails().get(1).setPurchase(purchase);
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new ResourceNotFoundException("El producto con ID " + productId + " no existe."));
 
-        purchase.getPurchaseDetails().get(0).setCategory(category);
-        purchase.getPurchaseDetails().get(1).setCategory(category);*/
-
-        Category category = new Category();
-        List<PurchaseDetail> purchaseDetails = purchase.getPurchaseDetails();
-
-        for (int i = 0; i < purchaseDetails.size(); i++){
-            Long categoryId = purchaseCreateDTO.getPurchaseDetails().get(i).getCategoryId();
-            int finalI = i;
-            category = this.categoryRepository.findById(categoryId).
-                    orElseThrow(() -> new ResourceNotFoundException("Categoria del producto " + finalI + " no encontrada."));
-
-            purchaseDetails.get(finalI).setCategory(category);
+            detail.setProduct(product);
+            detail.setPurchase(purchase);
         }
 
         PurchaseResponseDTO purchaseResponseDTO = this.purchaseMapper.toResponseDTO(this.purchaseRepository.save(purchase));
@@ -93,12 +83,21 @@ public class PurchaseServiceImpl implements PurchaseService {
         EmployeeResponseDTO employeeResponseDTO =  this.employeeMapper.toResponseDTO(employee);
         purchaseResponseDTO.setEmployee(employeeResponseDTO);
 
-        CategoryResponseDTO categoryResponseDTO = this.categoryMapper.toResponseDTO(category);
+        for (int i = 0; i < purchaseResponseDTO.getPurchaseDetails().size(); i++) {
+            PurchaseDetailResponseDTO detail = purchaseResponseDTO.getPurchaseDetails().get(i);
+            Long productId = purchaseCreateDTO.getPurchaseDetails().get(i).getProductId();
 
-        purchaseResponseDTO.getPurchaseDetails().get(0).setCategory(categoryResponseDTO);
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new ResourceNotFoundException("El producto con ID " + productId + " no existe."));
 
-        return purchaseResponseDTO;
+            ProductResponseDTO productResponseDTO = this.productMapper.toResponseDTO(product);
+
+            detail.setProduct(productResponseDTO);
+        }
+
+        return purchaseMapper.toResponseDTO(purchaseRepository.save(purchase));
     }
+
 
     @Override
     @Transactional

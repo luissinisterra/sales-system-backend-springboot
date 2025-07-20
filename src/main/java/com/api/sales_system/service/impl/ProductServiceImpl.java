@@ -1,12 +1,15 @@
 package com.api.sales_system.service.impl;
 
+import com.api.sales_system.dto.CategoryResponseDTO;
 import com.api.sales_system.dto.ProductCreateDTO;
 import com.api.sales_system.dto.ProductResponseDTO;
 import com.api.sales_system.dto.ProductUpdateDTO;
 import com.api.sales_system.entity.Category;
 import com.api.sales_system.entity.Product;
 import com.api.sales_system.entity.Provider;
+import com.api.sales_system.exception.ResourceAlreadyExistsException;
 import com.api.sales_system.exception.ResourceNotFoundException;
+import com.api.sales_system.mapper.CategoryMapper;
 import com.api.sales_system.mapper.ProductMapper;
 import com.api.sales_system.repository.CategoryRepository;
 import com.api.sales_system.repository.ProductRepository;
@@ -26,13 +29,21 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProviderRepository providerRepository;
     private final ProductMapper productMapper;
+    private final CategoryMapper categoryMapper;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ProviderRepository providerRepository, ProductMapper productMapper) {
+    public ProductServiceImpl(
+            ProductRepository productRepository,
+            CategoryRepository categoryRepository,
+            ProviderRepository providerRepository,
+            ProductMapper productMapper,
+            CategoryMapper categoryMapper
+    ) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.providerRepository = providerRepository;
         this.productMapper = productMapper;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
@@ -44,10 +55,18 @@ public class ProductServiceImpl implements ProductService {
         Provider provider = this.providerRepository.findById(productCreateDTO.getProviderId())
                 .orElseThrow(() -> new ResourceNotFoundException("Provider no encontrado."));
 
-        Product product = this.productMapper.toEntity(productCreateDTO);
+        boolean exists = this.productRepository.existsByName(productCreateDTO.getName());
+        if (exists) {
+            throw  new ResourceAlreadyExistsException("Producto con el nombre " + productCreateDTO.getName() + " ya existe en el sistema.");
+        }
 
+        Product product = this.productMapper.toEntity(productCreateDTO);
         product.setCategory(category);
         product.setProvider(provider);
+
+        ProductResponseDTO productResponseDTO = this.productMapper.toResponseDTO(product);
+        CategoryResponseDTO categoryResponseDTO = this.categoryMapper.toResponseDTO(category);
+        productResponseDTO.setCategory(categoryResponseDTO);
 
         return this.productMapper.toResponseDTO(this.productRepository.save(product));
     }

@@ -28,7 +28,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository, EmployeeMapper employeeMapper, RoleMapper roleMapper, PasswordEncoder passwordEncoder){
+    public EmployeeServiceImpl(
+            EmployeeRepository employeeRepository,
+            RoleRepository roleRepository,
+            EmployeeMapper employeeMapper,
+            RoleMapper roleMapper,
+            PasswordEncoder passwordEncoder
+    ){
         this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;
         this.employeeMapper = employeeMapper;
@@ -52,7 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         RoleResponseDTO roleResponseDTO = this.roleMapper.toResponseDTO(role);
         employeeResponseDTO.setRole(roleResponseDTO);
 
-        return employeeResponseDTO;
+        return this.employeeMapper.toResponseDTO(this.employeeRepository.save(employee));
     }
 
     @Override

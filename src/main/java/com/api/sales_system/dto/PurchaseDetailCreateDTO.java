@@ -15,23 +15,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class PurchaseDetailCreateDTO {
 
-    @NotNull(message = "El ID de la compra es obligatoria.")
-    private Long purchaseId;
-
-    @Schema(description = "Product name.", example = "Café Colombiano")
-    @NotBlank(message = "El nombre es obligatorio.")
-    private String productName;
-
-    @Schema(description = "Unit price of the product. Must be zero or greater.", example = "12900.50")
-    @Min(value = 0, message = "El precio no puede ser un número negativo.")
-    private BigDecimal price;
-
-    @Schema(
-            description = "Product category ID. Must match one of the allowed category values.",
-            example = "1"
-    )
-    @NotNull(message = "El ID de la categoría es obligatoria.")
-    private Long categoryId;
+    @NotNull(message = "El ID del producto es obligatorio.")
+    private Long productId;
 
     @Min(value = 1, message = "La cantidad debe ser mayor que cero.")
     private int quantity;
