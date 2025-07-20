@@ -1,5 +1,6 @@
 package com.api.sales_system.dto;
 
+import com.api.sales_system.entity.Product;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,7 @@ public class PurchaseDetailResponseDTO {
 
     private Long id;
 
-    private Long providerId;
-
-    private Long productId;
+    private ProductResponseDTO product;
 
     private int quantity;
 

@@ -25,7 +25,7 @@ public class ProductResponseDTO {
             description = "Category of the product.",
             example = "BEVERAGE"
     )
-    private Category category;
+    private CategoryResponseDTO category;
 
     @Schema(description = "Stock available in inventory.", example = "45")
     private int stock;

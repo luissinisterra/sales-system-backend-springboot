@@ -6,6 +6,7 @@ import com.api.sales_system.entity.Role;
 import com.api.sales_system.exception.CurrentPasswordInvalidException;
 import com.api.sales_system.exception.ResourceNotFoundException;
 import com.api.sales_system.mapper.EmployeeMapper;
+import com.api.sales_system.mapper.RoleMapper;
 import com.api.sales_system.repository.EmployeeRepository;
 import com.api.sales_system.repository.RoleRepository;
 import com.api.sales_system.service.EmployeeService;
@@ -23,13 +24,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
     private final EmployeeMapper employeeMapper;
+    private final RoleMapper roleMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository, EmployeeMapper employeeMapper, PasswordEncoder passwordEncoder){
+    public EmployeeServiceImpl(
+            EmployeeRepository employeeRepository,
+            RoleRepository roleRepository,
+            EmployeeMapper employeeMapper,
+            RoleMapper roleMapper,
+            PasswordEncoder passwordEncoder
+    ){
         this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;
         this.employeeMapper = employeeMapper;
+        this.roleMapper = roleMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -40,12 +49,14 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Rol no existente."));
 
         Employee employee = this.employeeMapper.toEntity(employeeCreateDTO);
-
         employee.setRole(role);
 
         String encodedPassword = this.passwordEncoder.encode(employee.getPassword());
-
         employee.setPassword(encodedPassword);
+
+        EmployeeResponseDTO employeeResponseDTO = this.employeeMapper.toResponseDTO(this.employeeRepository.save(employee));
+        RoleResponseDTO roleResponseDTO = this.roleMapper.toResponseDTO(role);
+        employeeResponseDTO.setRole(roleResponseDTO);
 
         return this.employeeMapper.toResponseDTO(this.employeeRepository.save(employee));
     }

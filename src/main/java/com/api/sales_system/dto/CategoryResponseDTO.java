@@ -15,12 +15,4 @@ public class CategoryResponseDTO {
 
     private String name;
 
-    private String description;
-
-    private Boolean active = true;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
 }

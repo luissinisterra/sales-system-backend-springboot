@@ -63,12 +63,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new ResourceAlreadyExistsException("Categoria con el nombre " + categoryUpdateDTO.getName() + " ya existe en el sistema."));
 
         category.setName(categoryUpdateDTO.getName());
-        category.setDescription(categoryUpdateDTO.getDescription());
         category.setActive(categoryUpdateDTO.isActive());
 
         return this.categoryMapper.toResponseDTO(this.categoryRepository.save(category));
     }
-
+    
     @Override
     public List<CategoryResponseDTO> getCategories() {
         List<Category> categories = this.categoryRepository.findAll();
