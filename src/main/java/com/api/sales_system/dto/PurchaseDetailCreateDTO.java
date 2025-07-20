@@ -1,6 +1,8 @@
 package com.api.sales_system.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,12 +21,10 @@ public class PurchaseDetailCreateDTO {
     @Min(value = 1, message = "La cantidad debe ser mayor que cero.")
     private int quantity;
 
-    @NotNull(message = "El precio unitario de la compra es obligatorio.")
-    @Min(value = 0, message = "El precio unitario de la compra no puede ser negativo.")
-    private BigDecimal unitPrice;
-
     @NotNull(message = "El precio total unitario de la compra es obligatorio.")
     @Min(value = 0, message = "El precio total unitario de la compra no puede ser negativo.")
     private BigDecimal subTotal;
 
 }
+
+

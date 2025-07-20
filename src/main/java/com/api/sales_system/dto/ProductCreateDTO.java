@@ -26,7 +26,7 @@ public class ProductCreateDTO {
     private BigDecimal price;
 
     @Schema(
-            description = "Product category. Must match one of the allowed enum values.",
+            description = "Product category ID. Must match one of the allowed category values.",
             example = "BEVERAGE"
     )
     @NotNull(message = "El ID de la categoría es obligatoria.")

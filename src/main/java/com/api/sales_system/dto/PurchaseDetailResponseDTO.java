@@ -2,6 +2,7 @@ package com.api.sales_system.dto;
 
 import com.api.sales_system.entity.Product;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,9 +19,9 @@ public class PurchaseDetailResponseDTO {
 
     private ProductResponseDTO product;
 
-    private int quantity;
+    private CategoryResponseDTO category;
 
-    private BigDecimal unitPrice;
+    private int quantity;
 
     private BigDecimal subTotal;
 
