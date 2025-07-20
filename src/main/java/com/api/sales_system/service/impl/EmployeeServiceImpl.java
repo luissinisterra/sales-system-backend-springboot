@@ -43,11 +43,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Rol no existente."));
 
         Employee employee = this.employeeMapper.toEntity(employeeCreateDTO);
-
         employee.setRole(role);
 
         String encodedPassword = this.passwordEncoder.encode(employee.getPassword());
-
         employee.setPassword(encodedPassword);
 
         EmployeeResponseDTO employeeResponseDTO = this.employeeMapper.toResponseDTO(this.employeeRepository.save(employee));

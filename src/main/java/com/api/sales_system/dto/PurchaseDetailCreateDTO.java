@@ -15,6 +15,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class PurchaseDetailCreateDTO {
 
+    @NotNull(message = "El ID de la compra es obligatoria.")
+    private Long purchaseId;
+
     @Schema(description = "Product name.", example = "Café Colombiano")
     @NotBlank(message = "El nombre es obligatorio.")
     private String productName;

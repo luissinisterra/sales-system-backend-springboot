@@ -64,26 +64,26 @@ public class PurchaseServiceImpl implements PurchaseService {
         purchase.setProvider(provider);
         purchase.setEmployee(employee);
 
-        Category category = this.categoryRepository.findById(1L).
+        /*Category category = this.categoryRepository.findById(1L).
                 orElseThrow(() -> new ResourceNotFoundException("Categoria del producto no encontrada."));
 
         purchase.getPurchaseDetails().get(0).setPurchase(purchase);
         purchase.getPurchaseDetails().get(1).setPurchase(purchase);
 
         purchase.getPurchaseDetails().get(0).setCategory(category);
-        purchase.getPurchaseDetails().get(1).setCategory(category);
+        purchase.getPurchaseDetails().get(1).setCategory(category);*/
 
+        Category category = new Category();
+        List<PurchaseDetail> purchaseDetails = purchase.getPurchaseDetails();
 
-        /*List<PurchaseDetail> purchaseDetails = purchase.getPurchaseDetails();
-
-        for (int i = 1; i < purchaseDetails.size(); i++){
+        for (int i = 0; i < purchaseDetails.size(); i++){
             Long categoryId = purchaseCreateDTO.getPurchaseDetails().get(i).getCategoryId();
             int finalI = i;
-            Category category = this.categoryRepository.findById(categoryId).
+            category = this.categoryRepository.findById(categoryId).
                     orElseThrow(() -> new ResourceNotFoundException("Categoria del producto " + finalI + " no encontrada."));
 
             purchaseDetails.get(finalI).setCategory(category);
-        }*/
+        }
 
         PurchaseResponseDTO purchaseResponseDTO = this.purchaseMapper.toResponseDTO(this.purchaseRepository.save(purchase));
 
