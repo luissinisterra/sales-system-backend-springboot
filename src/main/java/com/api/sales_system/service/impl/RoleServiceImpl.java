@@ -4,7 +4,6 @@ import com.api.sales_system.dto.RoleCreateDTO;
 import com.api.sales_system.dto.RoleResponseDTO;
 import com.api.sales_system.dto.RoleUpdateDTO;
 import com.api.sales_system.entity.Role;
-import com.api.sales_system.exception.ResourceAlreadyExistsException;
 import com.api.sales_system.exception.ResourceNotFoundException;
 import com.api.sales_system.mapper.RoleMapper;
 import com.api.sales_system.repository.RoleRepository;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RoleServiceImpl implements RoleService {

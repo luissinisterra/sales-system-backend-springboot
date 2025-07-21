@@ -1,6 +1,5 @@
 package com.api.sales_system.exception;
 
-import org.springframework.boot.autoconfigure.batch.BatchTaskExecutor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
