@@ -58,7 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         RoleResponseDTO roleResponseDTO = this.roleMapper.toResponseDTO(role);
         employeeResponseDTO.setRole(roleResponseDTO);
 
-        return this.employeeMapper.toResponseDTO(this.employeeRepository.save(employee));
+        return employeeResponseDTO;
     }
 
     @Override

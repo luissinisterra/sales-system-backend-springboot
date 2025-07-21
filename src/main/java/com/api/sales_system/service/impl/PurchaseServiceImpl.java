@@ -88,7 +88,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             Long productId = purchaseCreateDTO.getPurchaseDetails().get(i).getProductId();
 
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new ResourceNotFoundException("El producto con ID " + productId + " no existe."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto con ID " + productId + " no existe."));
 
             ProductResponseDTO productResponseDTO = this.productMapper.toResponseDTO(product);
 
@@ -103,7 +103,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Transactional
     public void deletePurchaseById(Long id) {
         Purchase purchase = this.purchaseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("La compra con ID " + id + " no fue encontrada."));
+                .orElseThrow(() -> new ResourceNotFoundException("Compra con ID " + id + " no fue encontrada."));
 
         this.purchaseRepository.delete(purchase);
     }
@@ -111,7 +111,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     public PurchaseResponseDTO getPurchaseById(Long id) {
         Purchase purchase = this.purchaseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("La compra con ID " + id + " no fue encontrada."));
+                .orElseThrow(() -> new ResourceNotFoundException("Compra con ID " + id + " no fue encontrada."));
 
         return this.purchaseMapper.toResponseDTO(purchase);
     }

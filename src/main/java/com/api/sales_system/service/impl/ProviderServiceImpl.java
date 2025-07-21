@@ -38,7 +38,7 @@ public class ProviderServiceImpl implements ProviderService {
     @Transactional
     public void deleteProviderById(Long id) {
         Provider provider = this.providerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("El proveedor con el id: " + id + " no fué encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado."));
 
         this.providerRepository.delete(provider);
     }
@@ -46,7 +46,7 @@ public class ProviderServiceImpl implements ProviderService {
     @Override
     public ProviderResponseDTO getProviderById(Long id) {
         Provider provider = this.providerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("El proveedor con el id: " + id + " no fué encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado."));
 
         return this.providerMapper.toResponseDTO(provider);
     }
@@ -55,7 +55,7 @@ public class ProviderServiceImpl implements ProviderService {
     @Transactional
     public ProviderResponseDTO updateProvider(Long id, ProviderUpdateDTO providerUpdateDTO) {
         Provider provider = this.providerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("El proveedor con el id: " + id + " no fué encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Proveedor con el id: " + id + " no fué encontrado."));
 
         provider.setCompanyName(providerUpdateDTO.getCompanyName());
         provider.setContactPerson(providerUpdateDTO.getContactPerson());
