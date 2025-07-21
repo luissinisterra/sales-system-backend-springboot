@@ -32,8 +32,8 @@ public class PurchaseDetail {
     @Column(nullable = false)
     private int quantity;
 
-    @Column(name = "unit_price", nullable = false)
-    private BigDecimal unitPrice;
+    @Column(name = "purchase_price", nullable = false)
+    private BigDecimal purchasePrice;
 
     @Column(name = "sub_total", nullable = false)
     private BigDecimal subTotal;

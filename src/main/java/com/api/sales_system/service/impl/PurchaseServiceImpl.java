@@ -94,7 +94,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
             detail.setProduct(productResponseDTO);
             detail.setSubTotal(
-                    BigDecimal.valueOf(detail.getQuantity()).multiply(detail.getUnitPrice())
+                    BigDecimal.valueOf(detail.getQuantity()).multiply(detail.getPurchasePrice())
             );
         }
 

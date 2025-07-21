@@ -19,9 +19,9 @@ public class PurchaseDetailCreateDTO {
     @Min(value = 1, message = "La cantidad debe ser mayor que cero.")
     private int quantity;
 
-    @NotNull(message = "El precio unitario de la compra es obligatorio.")
-    @Min(value = 0, message = "El precio unitario de la compra no puede ser negativo.")
-    private BigDecimal unitPrice;
+    @NotNull(message = "El precio de venta de la compra es obligatorio.")
+    @Min(value = 0, message = "El precio de venta de la compra no puede ser negativo.")
+    private BigDecimal purchasePrice;
 
     @NotNull(message = "El precio total unitario de la compra es obligatorio.")
     @Min(value = 0, message = "El precio total unitario de la compra no puede ser negativo.")
