@@ -1,0 +1,24 @@
+package com.api.sales_system.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class SaleDetailResponseDTO {
+
+    private Long id;
+
+    private ProductResponseDTO product;
+
+    private int quantity;
+
+    private BigDecimal unitPrice;
+
+    private BigDecimal subTotal;
+
+}

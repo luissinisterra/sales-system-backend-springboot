@@ -69,18 +69,17 @@ public class PurchaseServiceImpl implements PurchaseService {
             Long productId = purchaseCreateDTO.getPurchaseDetails().get(i).getProductId();
 
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new ResourceNotFoundException("El producto con ID " + productId + " no existe."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto con ID " + productId + " no existe."));
 
             detail.setProduct(product);
             detail.setPurchase(purchase);
         }
 
         PurchaseResponseDTO purchaseResponseDTO = this.purchaseMapper.toResponseDTO(this.purchaseRepository.save(purchase));
-
         ProviderResponseDTO providerResponseDTO = this.providerMapper.toResponseDTO(provider);
-        purchaseResponseDTO.setProvider(providerResponseDTO);
-
         EmployeeResponseDTO employeeResponseDTO =  this.employeeMapper.toResponseDTO(employee);
+
+        purchaseResponseDTO.setProvider(providerResponseDTO);
         purchaseResponseDTO.setEmployee(employeeResponseDTO);
 
         for (int i = 0; i < purchaseResponseDTO.getPurchaseDetails().size(); i++) {
@@ -95,7 +94,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             detail.setProduct(productResponseDTO);
         }
 
-        return purchaseMapper.toResponseDTO(purchaseRepository.save(purchase));
+        return purchaseResponseDTO;
     }
 
 
