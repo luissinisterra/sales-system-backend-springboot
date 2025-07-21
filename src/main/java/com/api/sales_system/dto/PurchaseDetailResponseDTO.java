@@ -1,8 +1,5 @@
 package com.api.sales_system.dto;
 
-import com.api.sales_system.entity.Product;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

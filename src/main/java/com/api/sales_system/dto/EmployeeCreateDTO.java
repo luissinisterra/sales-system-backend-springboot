@@ -1,6 +1,5 @@
 package com.api.sales_system.dto;
 
-import com.api.sales_system.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

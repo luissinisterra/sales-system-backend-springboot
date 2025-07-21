@@ -1,11 +1,8 @@
 package com.api.sales_system.dto;
 
-import com.api.sales_system.entity.ProviderProduct;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,7 +24,5 @@ public class ProviderResponseDTO {
     private String city;
 
     private String country;
-
-    /*private List<ProviderProduct> providerProducts;*/
 
 }

@@ -1,14 +1,10 @@
 package com.api.sales_system.dto;
 
-import com.api.sales_system.entity.ProviderProduct;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -36,8 +32,5 @@ public class ProviderUpdateDTO {
 
     @NotBlank(message = "El país es obligatorio.")
     private String country;
-
-    /*@NotNull(message = "La lista de productos del proveedor no puede estar vacía.")
-    private List<ProviderProduct> providerProducts;*/
 
 }
