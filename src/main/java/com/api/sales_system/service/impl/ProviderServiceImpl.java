@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProviderServiceImpl implements ProviderService {
@@ -32,42 +31,32 @@ public class ProviderServiceImpl implements ProviderService {
     @Transactional
     public ProviderResponseDTO createProvider(ProviderCreateDTO providerCreateDTO) {
         Provider provider = this.providerMapper.toEntity(providerCreateDTO);
-
         return this.providerMapper.toResponseDTO(this.providerRepository.save(provider));
     }
 
     @Override
     @Transactional
     public void deleteProviderById(Long id) {
-        Optional<Provider> providerOpt = this.providerRepository.findById(id);
+        Provider provider = this.providerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("El proveedor con el id: " + id + " no fué encontrado."));
 
-        if (providerOpt.isEmpty())
-            throw new ResourceNotFoundException("El proveedor con el id: " + id + " no fué encontrado.");
-
-        this.providerRepository.deleteById(id);
+        this.providerRepository.delete(provider);
     }
 
     @Override
     public ProviderResponseDTO getProviderById(Long id) {
-        Optional<Provider> providerOpt = this.providerRepository.findById(id);
+        Provider provider = this.providerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("El proveedor con el id: " + id + " no fué encontrado."));
 
-        if (providerOpt.isEmpty())
-            throw new ResourceNotFoundException("El proveedor con el id: " + id + " no fué encontrado.");
-
-        return this.providerMapper.toResponseDTO(providerOpt.get());
+        return this.providerMapper.toResponseDTO(provider);
     }
 
     @Override
     @Transactional
     public ProviderResponseDTO updateProvider(Long id, ProviderUpdateDTO providerUpdateDTO) {
-        Optional<Provider> providerOpt = this.providerRepository.findById(id);
+        Provider provider = this.providerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("El proveedor con el id: " + id + " no fué encontrado."));
 
-        if (providerOpt.isEmpty())
-            throw new ResourceNotFoundException("El proveedor con el id: " + id + " no fué encontrado.");
-
-        Provider provider = providerOpt.get();
-
-        // Actualizar campos del proveedor
         provider.setCompanyName(providerUpdateDTO.getCompanyName());
         provider.setContactPerson(providerUpdateDTO.getContactPerson());
         provider.setPhoneNumber(providerUpdateDTO.getPhoneNumber());

@@ -116,28 +116,6 @@ public class PurchaseServiceImpl implements PurchaseService {
         return this.purchaseMapper.toResponseDTO(purchase);
     }
 
-    /*@Override
-    @Transactional
-    public PurchaseResponseDTO updatePurchase(Long id, PurchaseUpdateDTO purchaseUpdateDTO) {
-        Purchase purchase = purchaseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("La compra con ID " + id + " no fue encontrada."));
-
-        Provider provider = providerRepository.findById(purchaseUpdateDTO.getProviderId())
-                .orElseThrow(() -> new ResourceNotFoundException("Proveedor con ID " + purchaseUpdateDTO.getProviderId() + " no encontrado."));
-
-        Employee employee = employeeRepository.findById(purchaseUpdateDTO.getEmployeeId())
-                .orElseThrow(() -> new ResourceNotFoundException("Empleado con ID " + purchaseUpdateDTO.getEmployeeId() + " no encontrado."));
-
-        purchase.setProvider(provider);
-        purchase.setEmployee(employee);
-        purchase.setPurchaseDate(purchaseUpdateDTO.getPurchaseDate());
-        purchase.setTotalAmount(purchaseUpdateDTO.getTotalAmount());
-
-        // Si también deseas actualizar los detalles (purchaseDetails), deberías manejarlos aquí.
-
-        return purchaseMapper.toResponseDTO(purchaseRepository.save(purchase));
-    }*/
-
     @Override
     public List<PurchaseResponseDTO> getPurchases() {
         List<Purchase> purchases = this.purchaseRepository.findAll();

@@ -72,28 +72,6 @@ public class SaleServiceImpl implements SaleService {
         return this.saleMapper.toResponseDTO(sale);
     }
 
-    /*@Override
-    @Transactional
-    public SaleResponseDTO updateSale(Long id, SaleUpdateDTO saleUpdateDTO) {
-        Sale sale = saleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("La venta con ID " + id + " no fue encontrada."));
-
-        Client client = clientRepository.findById(saleUpdateDTO.getClientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente con ID " + saleUpdateDTO.getClientId() + " no encontrado."));
-
-        Employee employee = employeeRepository.findById(saleUpdateDTO.getEmployeeId())
-                .orElseThrow(() -> new ResourceNotFoundException("Empleado con ID " + saleUpdateDTO.getEmployeeId() + " no encontrado."));
-
-        sale.setClient(client);
-        sale.setEmployee(employee);
-        sale.setSaleDate(saleUpdateDTO.getSaleDate());
-        sale.setTotalAmount(saleUpdateDTO.getTotalAmount());
-
-        // Si deseas actualizar los detalles de la venta (saleDetails), deberías manejarlos aquí.
-
-        return saleMapper.toResponseDTO(saleRepository.save(sale));
-    }*/
-
     @Override
     public List<SaleResponseDTO> getSales() {
         List<Sale> sales = this.saleRepository.findAll();
