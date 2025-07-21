@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -92,6 +93,9 @@ public class PurchaseServiceImpl implements PurchaseService {
             ProductResponseDTO productResponseDTO = this.productMapper.toResponseDTO(product);
 
             detail.setProduct(productResponseDTO);
+            detail.setSubTotal(
+                    BigDecimal.valueOf(detail.getQuantity()).multiply(detail.getUnitPrice())
+            );
         }
 
         return purchaseResponseDTO;
