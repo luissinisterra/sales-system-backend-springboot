@@ -52,8 +52,4 @@ public class Provider {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-
-    /*@OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProviderProduct> providerProducts;*/
-
 }
