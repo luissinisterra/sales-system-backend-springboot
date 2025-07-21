@@ -14,14 +14,14 @@ public class SaleResponseDTO {
 
     private Long id;
 
-    private Long clientId;
+    private ClientResponseDTO client;
 
-    private Long employeeId;
+    private EmployeeResponseDTO employee;
 
     private String saleDate;
 
     private BigDecimal totalAmount;
 
-    private List<SaleDetailCreateDTO> saleDetails;
+    private List<SaleDetailResponseDTO> saleDetails;
 
 }

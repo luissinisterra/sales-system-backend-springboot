@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PurchaseDetailResponseDTO {
+public class SaleDetailResponseDTO {
 
     private Long id;
 
@@ -17,7 +17,7 @@ public class PurchaseDetailResponseDTO {
 
     private int quantity;
 
-    private BigDecimal purchasePrice;
+    private BigDecimal unitPrice;
 
     private BigDecimal subTotal;
 

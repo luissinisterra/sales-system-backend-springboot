@@ -75,23 +75,6 @@ public class SaleController {
         return ResponseEntity.ok(saleResponseDTO);
     }
 
-    /*@PutMapping("/{id}")
-    @Operation(
-            summary = "Update sale by ID",
-            description = "Updates a sale using its ID."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Sale updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Sale not found")
-    })
-    public ResponseEntity<SaleResponseDTO> updateSale(
-            @Parameter(description = "ID of the sale to update", example = "1")
-            @PathVariable Long id,
-            @Valid @RequestBody SaleUpdateDTO saleUpdateDTO) {
-        SaleResponseDTO saleResponseDTO = this.saleServiceImpl.updateSale(id, saleUpdateDTO);
-        return ResponseEntity.ok(saleResponseDTO);
-    }*/
-
     @GetMapping
     @Operation(
             summary = "Get all sales",

@@ -1,14 +1,15 @@
 package com.api.sales_system.service.impl;
 
-import com.api.sales_system.dto.SaleCreateDTO;
-import com.api.sales_system.dto.SaleResponseDTO;
-import com.api.sales_system.entity.Client;
-import com.api.sales_system.entity.Employee;
-import com.api.sales_system.entity.Sale;
+import com.api.sales_system.dto.*;
+import com.api.sales_system.entity.*;
 import com.api.sales_system.exception.ResourceNotFoundException;
+import com.api.sales_system.mapper.ClientMapper;
+import com.api.sales_system.mapper.EmployeeMapper;
+import com.api.sales_system.mapper.ProductMapper;
 import com.api.sales_system.mapper.SaleMapper;
 import com.api.sales_system.repository.ClientRepository;
 import com.api.sales_system.repository.EmployeeRepository;
+import com.api.sales_system.repository.ProductRepository;
 import com.api.sales_system.repository.SaleRepository;
 import com.api.sales_system.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +24,31 @@ public class SaleServiceImpl implements SaleService {
     private final SaleRepository saleRepository;
     private final ClientRepository clientRepository;
     private final EmployeeRepository employeeRepository;
+    private final ProductRepository productRepository;
     private final SaleMapper saleMapper;
+    private final ClientMapper clientMapper;
+    private final EmployeeMapper employeeMapper;
+    private final ProductMapper productMapper;
 
     @Autowired
     public SaleServiceImpl(
             SaleRepository saleRepository,
             ClientRepository clientRepository,
             EmployeeRepository employeeRepository,
-            SaleMapper saleMapper
+            ProductRepository productRepository,
+            SaleMapper saleMapper,
+            ClientMapper clientMapper,
+            ProductMapper productMapper,
+            EmployeeMapper employeeMapper
     ) {
         this.saleRepository = saleRepository;
         this.clientRepository = clientRepository;
         this.employeeRepository = employeeRepository;
+        this.productRepository = productRepository;
         this.saleMapper = saleMapper;
+        this.clientMapper = clientMapper;
+        this.employeeMapper = employeeMapper;
+        this.productMapper = productMapper;
     }
 
     @Override
@@ -48,11 +61,40 @@ public class SaleServiceImpl implements SaleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Empleado con ID " + saleCreateDTO.getEmployeeId() + " no encontrado."));
 
         Sale sale = this.saleMapper.toEntity(saleCreateDTO);
-
         sale.setClient(client);
         sale.setEmployee(employee);
 
-        return this.saleMapper.toResponseDTO(this.saleRepository.save(sale));
+        for (int i = 0; i < sale.getSaleDetails().size(); i++) {
+            SaleDetail detail = sale.getSaleDetails().get(i);
+            Long productId = saleCreateDTO.getSaleDetails().get(i).getProductId();
+
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto con ID " + productId + " no existe."));
+
+            detail.setProduct(product);
+            detail.setSale(sale);
+        }
+
+        SaleResponseDTO saleResponseDTO = this.saleMapper.toResponseDTO(this.saleRepository.save(sale));
+        ClientResponseDTO clientResponseDTO = this.clientMapper.toResponseDTO(client);
+        EmployeeResponseDTO employeeResponseDTO = this.employeeMapper.toResponseDTO(employee);
+
+        saleResponseDTO.setClient(clientResponseDTO);
+        saleResponseDTO.setEmployee(employeeResponseDTO);
+
+        for (int i = 0; i < saleResponseDTO.getSaleDetails().size(); i++) {
+            SaleDetailResponseDTO detail = saleResponseDTO.getSaleDetails().get(i);
+            Long productId = saleCreateDTO.getSaleDetails().get(i).getProductId();
+
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto con ID " + productId + " no existe."));
+
+            ProductResponseDTO productResponseDTO = this.productMapper.toResponseDTO(product);
+
+            detail.setProduct(productResponseDTO);
+        }
+
+        return saleResponseDTO;
     }
 
     @Override
@@ -71,28 +113,6 @@ public class SaleServiceImpl implements SaleService {
 
         return this.saleMapper.toResponseDTO(sale);
     }
-
-    /*@Override
-    @Transactional
-    public SaleResponseDTO updateSale(Long id, SaleUpdateDTO saleUpdateDTO) {
-        Sale sale = saleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("La venta con ID " + id + " no fue encontrada."));
-
-        Client client = clientRepository.findById(saleUpdateDTO.getClientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente con ID " + saleUpdateDTO.getClientId() + " no encontrado."));
-
-        Employee employee = employeeRepository.findById(saleUpdateDTO.getEmployeeId())
-                .orElseThrow(() -> new ResourceNotFoundException("Empleado con ID " + saleUpdateDTO.getEmployeeId() + " no encontrado."));
-
-        sale.setClient(client);
-        sale.setEmployee(employee);
-        sale.setSaleDate(saleUpdateDTO.getSaleDate());
-        sale.setTotalAmount(saleUpdateDTO.getTotalAmount());
-
-        // Si deseas actualizar los detalles de la venta (saleDetails), deberías manejarlos aquí.
-
-        return saleMapper.toResponseDTO(saleRepository.save(sale));
-    }*/
 
     @Override
     public List<SaleResponseDTO> getSales() {

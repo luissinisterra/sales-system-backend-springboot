@@ -16,10 +16,15 @@ public class SaleDetailCreateDTO {
     @NotNull(message = "El ID del producto es obligatorio.")
     private Long productId;
 
-    @Min(value = 1, message = "La cantidad debe ser mayor que 0.")
+    @Min(value = 1, message = "La cantidad debe ser mayor que cero.")
     private int quantity;
 
-    @NotNull(message = "El precio unitario es obligatorio.")
+    @NotNull(message = "El precio unitario de la compra es obligatorio.")
+    @Min(value = 0, message = "El precio unitario de la compra no puede ser negativo.")
     private BigDecimal unitPrice;
+
+    @NotNull(message = "El precio total unitario de la compra es obligatorio.")
+    @Min(value = 0, message = "El precio total unitario de la compra no puede ser negativo.")
+    private BigDecimal subTotal;
 
 }

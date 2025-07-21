@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -69,18 +70,17 @@ public class PurchaseServiceImpl implements PurchaseService {
             Long productId = purchaseCreateDTO.getPurchaseDetails().get(i).getProductId();
 
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new ResourceNotFoundException("El producto con ID " + productId + " no existe."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto con ID " + productId + " no existe."));
 
             detail.setProduct(product);
             detail.setPurchase(purchase);
         }
 
         PurchaseResponseDTO purchaseResponseDTO = this.purchaseMapper.toResponseDTO(this.purchaseRepository.save(purchase));
-
         ProviderResponseDTO providerResponseDTO = this.providerMapper.toResponseDTO(provider);
-        purchaseResponseDTO.setProvider(providerResponseDTO);
-
         EmployeeResponseDTO employeeResponseDTO =  this.employeeMapper.toResponseDTO(employee);
+
+        purchaseResponseDTO.setProvider(providerResponseDTO);
         purchaseResponseDTO.setEmployee(employeeResponseDTO);
 
         for (int i = 0; i < purchaseResponseDTO.getPurchaseDetails().size(); i++) {
@@ -88,14 +88,17 @@ public class PurchaseServiceImpl implements PurchaseService {
             Long productId = purchaseCreateDTO.getPurchaseDetails().get(i).getProductId();
 
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new ResourceNotFoundException("El producto con ID " + productId + " no existe."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto con ID " + productId + " no existe."));
 
             ProductResponseDTO productResponseDTO = this.productMapper.toResponseDTO(product);
 
             detail.setProduct(productResponseDTO);
+            detail.setSubTotal(
+                    BigDecimal.valueOf(detail.getQuantity()).multiply(detail.getPurchasePrice())
+            );
         }
 
-        return purchaseMapper.toResponseDTO(purchaseRepository.save(purchase));
+        return purchaseResponseDTO;
     }
 
 
@@ -103,7 +106,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Transactional
     public void deletePurchaseById(Long id) {
         Purchase purchase = this.purchaseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("La compra con ID " + id + " no fue encontrada."));
+                .orElseThrow(() -> new ResourceNotFoundException("Compra con ID " + id + " no fue encontrada."));
 
         this.purchaseRepository.delete(purchase);
     }
@@ -111,32 +114,10 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     public PurchaseResponseDTO getPurchaseById(Long id) {
         Purchase purchase = this.purchaseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("La compra con ID " + id + " no fue encontrada."));
+                .orElseThrow(() -> new ResourceNotFoundException("Compra con ID " + id + " no fue encontrada."));
 
         return this.purchaseMapper.toResponseDTO(purchase);
     }
-
-    /*@Override
-    @Transactional
-    public PurchaseResponseDTO updatePurchase(Long id, PurchaseUpdateDTO purchaseUpdateDTO) {
-        Purchase purchase = purchaseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("La compra con ID " + id + " no fue encontrada."));
-
-        Provider provider = providerRepository.findById(purchaseUpdateDTO.getProviderId())
-                .orElseThrow(() -> new ResourceNotFoundException("Proveedor con ID " + purchaseUpdateDTO.getProviderId() + " no encontrado."));
-
-        Employee employee = employeeRepository.findById(purchaseUpdateDTO.getEmployeeId())
-                .orElseThrow(() -> new ResourceNotFoundException("Empleado con ID " + purchaseUpdateDTO.getEmployeeId() + " no encontrado."));
-
-        purchase.setProvider(provider);
-        purchase.setEmployee(employee);
-        purchase.setPurchaseDate(purchaseUpdateDTO.getPurchaseDate());
-        purchase.setTotalAmount(purchaseUpdateDTO.getTotalAmount());
-
-        // Si también deseas actualizar los detalles (purchaseDetails), deberías manejarlos aquí.
-
-        return purchaseMapper.toResponseDTO(purchaseRepository.save(purchase));
-    }*/
 
     @Override
     public List<PurchaseResponseDTO> getPurchases() {

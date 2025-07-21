@@ -49,16 +49,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponseDTO createProduct(ProductCreateDTO productCreateDTO) {
+        boolean exists = this.productRepository.existsByName(productCreateDTO.getName());
+        if (exists) {
+            throw  new ResourceAlreadyExistsException("Producto con el nombre " + productCreateDTO.getName() + " ya existe en el sistema.");
+        }
+
         Category category = this.categoryRepository.findById(productCreateDTO.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Categoria no encontrada."));
 
         Provider provider = this.providerRepository.findById(productCreateDTO.getProviderId())
                 .orElseThrow(() -> new ResourceNotFoundException("Provider no encontrado."));
-
-        boolean exists = this.productRepository.existsByName(productCreateDTO.getName());
-        if (exists) {
-            throw  new ResourceAlreadyExistsException("Producto con el nombre " + productCreateDTO.getName() + " ya existe en el sistema.");
-        }
 
         Product product = this.productMapper.toEntity(productCreateDTO);
         product.setCategory(category);
